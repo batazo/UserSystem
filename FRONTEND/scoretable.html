@@ -1,0 +1,144 @@
+<html>
+  <head>
+  <title>SCDORE TABLE - Fetch API</title>
+  
+  
+    <style>
+   
+   #scoreTable {
+  font-family: arial, sans-serif;
+  font-size: 20px;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#scoreTable td, #scoreTable th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+#scoreTable tr:nth-child(odd) {
+  background: #ccffcc;
+}
+
+#scoreTable tr:nth-child(even) {
+  background-color: #e6ffe6;
+}
+
+#scoreTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+}
+
+
+#scoreTable tr:hover {background-color: #ddd;}
+   
+   
+    </style>
+  
+  </head>
+  <body>
+
+
+<table id="scoreTable">
+  <tbody>
+  <!-- Scores -->
+  <tr>
+    <th> Name </th>
+    <th> Score </th>
+  </tr>
+  <!-- Js added scores -->
+  
+    
+ </tbody>
+</table>
+
+<script>
+
+const scoreTable = document.querySelector("#scoreTable");
+const url = "https://usersystem.mysqhost.tk/api/userscore.php";
+let actualUser = "Bzozoo";
+
+let storedDatas;
+let dataByScore;
+
+fetch(url, { method: "GET", mode: "cors", cache: "no-cache" })
+  .then((response) => response.json())
+  .then((data) => getData(data));
+
+function getData(data) {
+  storedDatas = data;
+  console.log(storedDatas);
+
+  dataByScore = storedDatas.slice(0);
+  dataByScore.sort(function (a, b) {
+    return b.UserScore - a.UserScore;
+  });
+  console.log("Data by Score");
+  console.log(dataByScore);
+
+  printDataToHTML(scoreTable.tBodies[0], dataByScore);
+}
+
+function printDataToHTML(where, what) {
+  what.forEach(function (element) {
+    where.innerHTML += `
+        <tr>
+          <td> ${element.UserName}  </td>
+          <td> ${element.UserScore} </td>
+        </tr>`;
+  });
+  
+  sortTable()
+}
+
+function getUserScoreByName(name) {
+  let z;
+  storedDatas.forEach(function (element) {
+    if (element.UserName === name) {
+      z = element.UserScore;
+    }
+  });
+  return z;
+}
+
+function sortTable() {
+  const getCellValue = (tr, idx) =>
+    tr.children[idx].innerText || tr.children[idx].textContent;
+
+  const comparer = (idx, asc) => (a, b) =>
+    ((v1, v2) =>
+      v1 !== "" && v2 !== "" && !isNaN(v1) && !isNaN(v2)
+        ? v1 - v2
+        : v1.toString().localeCompare(v2))(
+      getCellValue(asc ? a : b, idx),
+      getCellValue(asc ? b : a, idx)
+    );
+
+  // do the work...
+  document.querySelectorAll("th").forEach((th) =>
+    th.addEventListener("click", () => {
+      const table = th.closest("table");
+      Array.from(table.querySelectorAll("tr:nth-child(n+2)"))
+        .sort(
+          comparer(
+            Array.from(th.parentNode.children).indexOf(th),
+            (this.asc = !this.asc)
+          )
+        )
+        .forEach((tr) => table.appendChild(tr));
+    })
+  );
+}
+
+
+</script>
+
+
+</body>
+</html>
