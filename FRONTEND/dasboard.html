@@ -1,0 +1,144 @@
+<html>
+  <head>
+  <title>USER DASBOARD</title>
+  
+  
+    <style>
+   .hidden {
+  display: none;
+}
+
+#container {
+  border: black 1px solid;
+  padding: 10px;
+}
+
+.errorBox {
+  margin-top: 5px;
+  padding: 3px;
+  background: #F7C8C8;
+  width: 97%;
+  heigth: 20px;
+  border: red 1px solid;
+  border-radius: 3px;
+}
+
+#container input{
+  width: 97%;
+}  
+    </style>
+  
+  </head>
+  <body>
+
+<div id="container">
+  <div id="loginFormDiv">
+    <form id="loginForm" name="loginForm" action="">
+      
+      <label for="nameField"><strong>Username:</strong></label></br>
+      <input type="text" id="nameField" name="nameField" required>
+      <div id="errorBoxName" class="errorBox hidden"></div>  
+      <p>
+      <label for="passField"><strong>Password</strong> (8 characters minimum):</label></br>
+      <input type="password" id="passField" name="passField" minlength="8" required>
+      <div id="errorBoxPass" class="errorBox hidden"></div>
+      </p>
+      
+      <p>
+        <input type="button" id="submitButton" name="submitButton" value="LOGIN">
+      </p>
+       <div id="errorBoxCommon" class="errorBox hidden"></div>
+    </form>
+  </div>
+  <div id="userDatasDiv" class="hidden">
+
+  </div>
+</div>
+
+<script>
+  //constanes and variables
+const loginForm = document.querySelector("#loginForm");
+let passField = document.querySelector("#passField");
+let nameField = document.querySelector("#nameField");
+const submitButton = document.querySelector("#submitButton");
+const errorBoxCommon = document.querySelector("#errorBoxCommon");
+const errorBoxName = document.querySelector("#errorBoxName");
+const errorBoxPass = document.querySelector("#errorBoxPass");
+const errorBoxes = document.querySelectorAll(".errorBox");
+const inputBoxes = document.querySelectorAll("#container input");
+
+//Login API
+const loginEndpoint = "https://usersystem.mysqhost.tk/api/login.php";
+
+function loginFormValues() {
+  console.log(nameField.value);
+  console.log(passField.value);
+}
+
+function processLogin(nameField, passField) {
+  let checkData = checkDatas(nameField, passField);
+
+  if (checkData) {
+    submitButton.disabled = true;
+    var formData = new FormData();
+    formData.append("nameField", nameField);
+    formData.append("passField", passField);
+
+    let loginFetchOptions = {
+      method: "POST",
+      mode: "cors",
+      body: formData
+    };
+
+    fetch(loginEndpoint, loginFetchOptions)
+      .then((response) => response.json())
+      .then(function (data) {
+        console.log(data);
+        submitButton.disabled = false;
+      });
+  }
+}
+
+function checkDatas(nameField, passField) {
+  
+  let valueLengthOfPass = document.querySelector("#passField").value.length;
+  if (valueLengthOfPass < 8) {
+    errorBoxPass.innerHTML = "The password must be 8 characters long ";
+    errorBoxPass.classList.remove("hidden");
+  }
+  
+  if (nameField === "") {
+    errorBoxName.innerHTML = "Name is empty";
+    errorBoxName.classList.remove("hidden");
+  }
+
+  if (passField === "") {
+    errorBoxPass.innerHTML = "Passworld is empty";
+    errorBoxPass.classList.remove("hidden");
+  }
+
+  if (passField != "" && nameField != "" && valueLengthOfPass >= 8) {
+    return true;
+  }
+}
+
+function removeAllErrorMessage() {
+  errorBoxes.forEach(function (errorBox) {
+    errorBox.innerHTML = "";
+    errorBox.classList.add("hidden");
+  });
+}
+
+inputBoxes.forEach(function (inputBox) {
+  inputBox.addEventListener("input", removeAllErrorMessage);
+});
+
+submitButton.addEventListener("click", () =>
+  processLogin(nameField.value, passField.value)
+);
+
+</script>
+
+
+</body>
+</html>
