@@ -56,6 +56,7 @@
 </div>
 
 <script>
+  
   //constanes and variables
 const loginForm = document.querySelector("#loginForm");
 let passField = document.querySelector("#passField");
@@ -69,6 +70,7 @@ const inputBoxes = document.querySelectorAll("#container input");
 
 //Login API
 const loginEndpoint = "https://usersystem.mysqhost.tk/api/login.php";
+const memberEndpoint = "https://usersystem.mysqhost.tk/api/member.php";
 
 function loginFormValues() {
   console.log(nameField.value);
@@ -97,6 +99,19 @@ function processLogin(nameField, passField) {
         submitButton.disabled = false;
       });
   }
+}
+
+function getMember(){
+   let memberFetchOptions = {
+      method: "POST",
+      mode: "cors",
+      };
+
+    fetch(memberEndpoint, memberFetchOptions)
+      .then((response) => response.text())
+      .then(function (data) {
+        console.log(data);
+      });
 }
 
 function checkDatas(nameField, passField) {
@@ -137,6 +152,7 @@ submitButton.addEventListener("click", () =>
   processLogin(nameField.value, passField.value)
 );
 
+  
 </script>
 
 
