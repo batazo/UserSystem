@@ -1,7 +1,7 @@
 <html>
   <head>
   <title>USER DASBOARD</title>
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   
     <style>
    .hidden {
@@ -57,20 +57,41 @@
 
 <script>
   
-  //constanes and variables
-const loginForm = document.querySelector("#loginForm");
+//constanes and variables
+let loginForm = document.querySelector("#loginForm");
 let passField = document.querySelector("#passField");
 let nameField = document.querySelector("#nameField");
-const submitButton = document.querySelector("#submitButton");
+let submitButton = document.querySelector("#submitButton");
 const errorBoxCommon = document.querySelector("#errorBoxCommon");
 const errorBoxName = document.querySelector("#errorBoxName");
 const errorBoxPass = document.querySelector("#errorBoxPass");
 const errorBoxes = document.querySelectorAll(".errorBox");
 const inputBoxes = document.querySelectorAll("#container input");
+const userDatasDiv = document.querySelector("#userDatasDiv");
+let storedLoginDatas;
+let storedUserScore;
 
 //Login API
 const loginEndpoint = "https://usersystem.mysqhost.tk/api/login.php";
 const memberEndpoint = "https://usersystem.mysqhost.tk/api/member.php";
+const userScoreEndpoint = "https://usersystem.mysqhost.tk/api/userscore.php?userName=";
+
+initLoginForm()
+
+function initLoginForm(){
+ if(checkUserCookiesExist()){
+   userLoggedIn()
+ } else { userLogOut() }
+}
+
+
+function checkUserCookiesExist(){
+ if(document.cookie.indexOf('ui=') === -1 || document.cookie.indexOf('una=') === -1 || document.cookie.indexOf('use=') === -1 || document.cookie.indexOf('utk=') === -1){
+   return false;
+ } else { 
+   console.log("YES COOKIES EXIST")
+   return true; }
+}
 
 function loginFormValues() {
   console.log(nameField.value);
@@ -88,6 +109,7 @@ function processLogin(nameField, passField) {
 
     let loginFetchOptions = {
       method: "POST",
+      credentials: "include",
       mode: "cors",
       body: formData
     };
@@ -97,39 +119,160 @@ function processLogin(nameField, passField) {
       .then(function (data) {
         console.log(data);
         submitButton.disabled = false;
-      });
+        storedLoginDatas = JSON.parse(data);
+        
+        if(storedLoginDatas.Login === "Success"){
+          console.log(` Login ${storedLoginDatas.Login}`)
+          createUserCookies()
+          userLoggedIn()
+        }
+      
+      if(storedLoginDatas.Login === "Failed"){
+        console.log(` Login ${storedLoginDatas.Login}`)
+        showLoginFail()
+      }
+      
+    });
   }
 }
 
-function getMember(){
-   let memberFetchOptions = {
-      method: "GET",
-      credentials: 'include',
-      mode: "cors"
-      };
+function showLoginFail(){
+  errorBoxCommon.innerHTML = "Login failed"
+  errorBoxCommon.classList.remove("hidden")
+}
 
-    fetch(memberEndpoint, memberFetchOptions)
-      .then((response) => response.text())
-      .then(function (data) {
-        console.log(data);
-      });
+function createUserCookies(){
+  document.cookie = `ui=${storedLoginDatas.UserID}; path=/; SameSite=None; Secure`;
+  document.cookie = `una=${storedLoginDatas.UserName}; path=/; SameSite=None; Secure`;
+  document.cookie = `use=${storedLoginDatas.UserSecret}; path=/; SameSite=None; Secure`;
+  document.cookie = `utk=${storedLoginDatas.UserToken}; path=/; SameSite=None; Secure`;
+  document.cookie = `ses=${storedLoginDatas.SessionId}; path=/; SameSite=None; Secure`;
+}
+
+function deleteUserCookies(){
+  document.cookie = `ui=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=None; Secure`;
+  document.cookie = `una=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=None; Secure`;
+  document.cookie = `use=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=None; Secure`;
+  document.cookie = `utk=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=None; Secure`;
+  document.cookie = `ses=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=None; Secure`;
+}
+
+function userLogOut(){
+  userDatasDiv.classList.add("hidden")
+  userDatasDiv.innerHTML = ""
+  deleteUserCookies()
+  loginFormDiv.classList.remove("hidden");
+}
+
+
+function userLoggedIn(){
+  let cookieUserName = getCookie("una")
+  let cookieUserId = getCookie("ui")
+  let cookieUserSecret = getCookie("use")
+  let cookieUserToken = getCookie("utk")
+  let cookiePHPses = getCookie("ses")
+  
+  loginFormDiv.classList.add("hidden");
+  
+  userDatasDiv.innerHTML = `<p>YOU ARE LOGGED IN ${cookieUserName}</p>`
+  userDatasDiv.innerHTML += `<p>UID :  ${cookieUserId}</p>`
+  userDatasDiv.innerHTML += `<p>USEC :  ${cookieUserSecret}</p>`
+  userDatasDiv.innerHTML += `<p>UTOK :  ${cookieUserToken}</p>`
+  userDatasDiv.innerHTML += `<p>PHPSES :  ${cookiePHPses}</p>`
+  
+  userDatasDiv.innerHTML += `<p id="userscoreinprofile">USER SCORE : Loading...</p>`
+  
+  userDatasDiv.innerHTML += `<p><input id="logoutButton" name="logoutButton" type="button" value="LOGOUT" onclick="userLogOut()"></p>`
+  
+   getLoggedUserScore(cookieUserName)
+   userDatasDiv.classList.remove("hidden")
+}
+
+function renderLoggedUserScore(scoreData){
+  let userscoreinprofileDiv = document.querySelector("#userscoreinprofile")
+  userscoreinprofileDiv.innerHTML = "USER SCORE : " + scoreData;
+}
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function getMember() {
+  let memberFetchOptions = {
+    method: "GET",
+    credentials: "include",
+    mode: "cors"
+  };
+
+  fetch(memberEndpoint, memberFetchOptions)
+    .then((response) => response.text())
+    .then(function (data) {
+      console.log(data);
+    });
+}
+
+function reqListener() {
+  console.log(this.responseText);
+}
+
+function getMemberX() {
+  var oReq = new XMLHttpRequest();
+  oReq.addEventListener("load", reqListener);
+  oReq.open("GET", memberEndpoint);
+  oReq.withCredentials = true;
+  oReq.send();
+}
+
+function getLoggedUserScore(user){
+    let userScoreFetchOptions = {
+    method: "GET",
+    cache: "no-cache",
+    mode: "cors"
+  };
+
+  fetch(userScoreEndpoint + user, userScoreFetchOptions)
+    .then((response) => response.json())
+    .then(function (data) {
+      storedUserScore = JSON.parse(data.UserScore);
+      console.log(storedUserScore)
+      renderLoggedUserScore(storedUserScore)
+      return storedUserScore
+    });
+}
+
+function loadXMLDoc(theURL) {
+  if (window.XMLHttpRequest) {
+    // code for IE7+, Firefox, Chrome, Opera, Safari, SeaMonkey
+    xmlhttp = new XMLHttpRequest();
+  } else {
+    // code for IE6, IE5
+    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange = function () {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+      alert(xmlhttp.responseText);
+    }
+  };
+  xmlhttp.open("GET", theURL, false);
+  xmlhttp.send();
 }
 
 function checkDatas(nameField, passField) {
-  
   let valueLengthOfPass = document.querySelector("#passField").value.length;
   if (valueLengthOfPass < 8) {
     errorBoxPass.innerHTML = "The password must be 8 characters long ";
     errorBoxPass.classList.remove("hidden");
   }
-  
+
   if (nameField === "") {
     errorBoxName.innerHTML = "Name is empty";
     errorBoxName.classList.remove("hidden");
   }
 
   if (passField === "") {
-    errorBoxPass.innerHTML = "Passworld is empty";
+    errorBoxPass.innerHTML = "Password is empty";
     errorBoxPass.classList.remove("hidden");
   }
 
