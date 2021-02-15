@@ -16,8 +16,7 @@ class Member
         $this->ds = new DataSource();
     }
 
-    function getMemberById($memberId)
-    {
+    function getMemberById($memberId){
         $query = "select * FROM " . DataSource::USERTABLE . " WHERE ID = ?";
         $paramType = "i";
         $paramArray = array($memberId);
@@ -26,8 +25,17 @@ class Member
         return $memberResult;
     }
 	
-	function getAllMember()
-    {
+	
+    function getMemberByUNAME($memberName){
+        $query = "select * FROM " . DataSource::USERTABLE . " WHERE UserName = ?";
+        $paramType = "s";
+        $paramArray = array($memberName);
+        $memberResultByName = $this->ds->select($query, $paramType, $paramArray);
+        
+        return $memberResultByName;
+    }
+	
+	function getAllMember(){
         $query = "select * FROM " . DataSource::USERTABLE;
         $AllMemberResult = $this->ds->select($query);
         
@@ -41,6 +49,10 @@ class Member
         $paramArray = array($username, $passwordHash);
         $memberResult = $this->ds->select($query, $paramType, $paramArray);
         if(!empty($memberResult)) {
+			$_SESSION["UserID"] = $memberResult[0]["ID"];
+			$_SESSION["UserName"] = $memberResult[0]["UserName"];
+			$_SESSION["UserSecret"] = $memberResult[0]["UserSecret"];
+			$_SESSION["UserToken"] = $memberResult[0]["UserToken"];
             return true;
         }
     }
