@@ -4,9 +4,13 @@ use \Usersystem\Score;
 
 require_once __DIR__ . '/class/Score.php';
 
-header("Content-Type: application/json");
+if(isset($_SERVER["HTTP_REFERER"])){
+$rest = substr($_SERVER["HTTP_REFERER"], 0, -1);
+} else { $rest = "*";}
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Origin: ' . $rest . '');
 
-header('Access-Control-Allow-Origin: *');
+header("Content-Type: application/json");
 
 
 //Get Score By UserName
