@@ -5,7 +5,9 @@ use \Usersystem\Score;
 require_once __DIR__ . '/class/Score.php';
 
 if(isset($_SERVER["HTTP_REFERER"])){
-$rest = substr($_SERVER["HTTP_REFERER"], 0, -1);
+$restprefix = ($_SERVER['HTTPS'] == 'on') ? "https://" : "http://";
+
+$rest = $restprefix . parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
 } else { $rest = "*";}
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Origin: ' . $rest . '');
