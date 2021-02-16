@@ -57,7 +57,7 @@
 
 <script>
   
-//constanes and variables
+  //constanes and variables
 let loginForm = document.querySelector("#loginForm");
 let passField = document.querySelector("#passField");
 let nameField = document.querySelector("#nameField");
@@ -181,16 +181,36 @@ function userLoggedIn(){
   userDatasDiv.innerHTML += `<p>PHPSES :  ${cookiePHPses}</p>`
   
   userDatasDiv.innerHTML += `<p id="userscoreinprofile">USER SCORE : Loading...</p>`
+  userDatasDiv.innerHTML += `<p><a target="_new" href="https://codepen.io/bzozoo/full/VwmKOVj">SCORE TABLE</a></p>`
   
   userDatasDiv.innerHTML += `<p><input id="logoutButton" name="logoutButton" type="button" value="LOGOUT" onclick="userLogOut()"></p>`
   
-   getLoggedUserScore(cookieUserName)
+   renderUserScoreByName(cookieUserName, document.querySelector("#userscoreinprofile"))
    userDatasDiv.classList.remove("hidden")
 }
 
-function renderLoggedUserScore(scoreData){
-  let userscoreinprofileDiv = document.querySelector("#userscoreinprofile")
-  userscoreinprofileDiv.innerHTML = "USER SCORE : " + scoreData;
+async function getUserScoreEndpoint(user){
+    let userScoreFetchOptions = {
+    method: "GET",
+    cache: "no-cache",
+    mode: "cors"
+  };
+  
+  const response = await fetch(userScoreEndpoint + user, userScoreFetchOptions)
+  const responsedjson = await response.json();
+  return responsedjson
+}
+
+async function getScoreByUsername(uname) {
+  let user = await getUserScoreEndpoint(uname);
+  let userscore = await user.UserScore;
+  return userscore;
+}
+
+  
+async function renderUserScoreByName(who, where){
+  let score = await getScoreByUsername(who);
+    where.innerHTML = "USER SCORE : " + score;
 }
 
 function getCookie(name) {
@@ -225,22 +245,7 @@ function getMemberX() {
   oReq.send();
 }
 
-function getLoggedUserScore(user){
-    let userScoreFetchOptions = {
-    method: "GET",
-    cache: "no-cache",
-    mode: "cors"
-  };
 
-  fetch(userScoreEndpoint + user, userScoreFetchOptions)
-    .then((response) => response.json())
-    .then(function (data) {
-      storedUserScore = JSON.parse(data.UserScore);
-      console.log(storedUserScore)
-      renderLoggedUserScore(storedUserScore)
-      return storedUserScore
-    });
-}
 
 function loadXMLDoc(theURL) {
   if (window.XMLHttpRequest) {
