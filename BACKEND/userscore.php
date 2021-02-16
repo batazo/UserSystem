@@ -29,7 +29,7 @@ if(isset($_GET["userName"])){
  
    echo json_encode($result, JSON_PRETTY_PRINT);
    } else {
-	$result = json_decode('{"Username": "UserName does not exist", "UserScore":"UserScore does not exist"}');
+	$result = json_decode('{"UserName": "UserName does not exist", "UserScore":"UserScore does not exist"}');
 	echo json_encode($result, JSON_PRETTY_PRINT); }
 
    exit;
