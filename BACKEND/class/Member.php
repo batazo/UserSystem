@@ -43,7 +43,21 @@ class Member
     }
     
     public function processLogin($username, $password) {
-        $passwordHash = md5($password);
+		$queryUserPassworldHash = "select UserPassword FROM " . DataSource::USERTABLE . " WHERE UserName = ?";
+		$paramTypeForUP = "s";
+		$paramArrayForUP = array($username);
+		$userPassworldHashResult = $this->ds->select($queryUserPassworldHash, $paramTypeForUP, $paramArrayForUP);
+
+		$passwordHash = (isset($userPassworldHashResult[0]['UserPassword'])) ? $userPassworldHashResult[0]['UserPassword'] : "zero";
+
+		$queryUna = "select UserName FROM " . DataSource::USERTABLE . " WHERE UserPassword = ?";
+		$paramTypeForUn = "s";
+		$paramArray = array($passwordHash);
+		$userResult = $this->ds->select($queryUna, $paramTypeForUn, $paramArray);
+		$userNameByPwHash = (isset($userResult[0]['UserName'])) ? $userResult[0]['UserName'] : "00000000000000000000000";
+		
+		
+		if (password_verify($password, $passwordHash) && $userNameByPwHash === $username) {
         $query = "select * FROM " . DataSource::USERTABLE . " WHERE UserName = ? AND UserPassword = ?";
         $paramType = "ss";
         $paramArray = array($username, $passwordHash);
@@ -54,6 +68,13 @@ class Member
 			$_SESSION["UserSecret"] = $memberResult[0]["UserSecret"];
 			$_SESSION["UserToken"] = $memberResult[0]["UserToken"];
             return true;
-        }
+        } else {
+               			   
+			return false;
+		}
+          } else {
+               return false;
+         }
+		
     }
 }
