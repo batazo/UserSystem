@@ -34,12 +34,36 @@ class Member
         
         return $memberResultByName;
     }
+
+    function checkMemberExist($memberName){
+        $query = "select UserName FROM " . DataSource::USERTABLE . " WHERE UserName = ?";
+        $paramType = "s";
+        $paramArray = array($memberName);
+        $memberResultByName = $this->ds->select($query, $paramType, $paramArray);
+        $searchedMember = (isset($memberResultByName[0]['UserName'])) ? $memberResultByName[0]['UserName'] : false;
+        return ($searchedMember !== false && $searchedMember === $memberName) ? "YES" : "NO";
+    }
 	
 	function getAllMember(){
         $query = "select * FROM " . DataSource::USERTABLE;
         $AllMemberResult = $this->ds->select($query);
         
         return $AllMemberResult;
+    }
+
+    function registerUser($username, $password){
+
+            $userSecret = rand(100000000, 999999999);
+            $userToken = rand(100000000, 999999999);
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+            $query = "INSERT INTO " . DataSource::USERTABLE . " (UserName, UserPassword, UserSecret, UserToken) VALUES (?, ?, ?, ?)";
+            $paramType = "ssii";
+            $paramArray = Array($username, $hashed_password, $userSecret, $userToken);
+            $regUserID = $this->ds->insert($query, $paramType, $paramArray);
+            
+            $registration = (isset($regUserID)) ? "Success" : "Failed";
+            return $registration;
     }
     
     public function processLogin($username, $password) {
@@ -50,14 +74,7 @@ class Member
 
 		$passwordHash = (isset($userPassworldHashResult[0]['UserPassword'])) ? $userPassworldHashResult[0]['UserPassword'] : "zero";
 
-		$queryUna = "select UserName FROM " . DataSource::USERTABLE . " WHERE UserPassword = ?";
-		$paramTypeForUn = "s";
-		$paramArray = array($passwordHash);
-		$userResult = $this->ds->select($queryUna, $paramTypeForUn, $paramArray);
-		$userNameByPwHash = (isset($userResult[0]['UserName'])) ? $userResult[0]['UserName'] : "00000000000000000000000";
-		
-		
-		if (password_verify($password, $passwordHash) && $userNameByPwHash === $username) {
+		if (password_verify($password, $passwordHash)) {
         $query = "select * FROM " . DataSource::USERTABLE . " WHERE UserName = ? AND UserPassword = ?";
         $paramType = "ss";
         $paramArray = array($username, $passwordHash);
