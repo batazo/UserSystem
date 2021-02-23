@@ -3,28 +3,48 @@ namespace Usersystem;
 
 use \Usersystem\Member;
 
-if(isset($_SERVER["HTTP_REFERER"])){
-$restprefix = ($_SERVER['HTTPS'] == 'on') ? "https://" : "http://";
+require_once (__DIR__ . "/headerset.php");
 
-$rest = $restprefix . parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
-} else { $rest = "*";}
-header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Allow-Origin: ' . $rest . '');
+require_once (__DIR__ . "/class/Member.php");
+
+if(isset($_GET['memberCheck'])){
+    if($_POST['checkeMember']){
+            $member = new Member();
+            $memberName = $_POST['checkeMember'];
+            $checkMember = $member->checkMemberExist($memberName);
+        echo $checkMember;
+    }
+}
 
 
+if(isset($_GET['profile'])){
+     if(isset($_POST['sessid'])){
 
+        session_id($_POST['sessid']);
+        session_start();
 
-   require_once (__DIR__ . "/class/Member.php");
-   ini_set('session.cookie_domain', $rest);
-   session_start();
-   echo $_SESSION["UserName"];
-   
-   if (! empty($_SESSION["UserID"]) && ! empty($_SESSION["UserSecret"]) && ! empty($_SESSION["UserToken"]) ) {
-	   $sessionUserID = $_SESSION['UserID'];
-	   $sessionUserName = $_SESSION["UserName"];
-	   $sessionUserSecret = $_SESSION["UserSecret"];
-	   $sessionUserToken = $_SESSION["UserToken"];
-	   
-	   echo " * " . $sessionUserID . " - " . $sessionUserName . " - " . $sessionUserSecret . " - " . $sessionUserToken;
-	   
-   }
+        header("Content-Type: application/json");
+
+        if(isset($_SESSION["UserName"]) || isset($_SESSION["UserID"])){
+            $member = new Member();
+            $memberProfile = $member->getMemberByUNAME($_SESSION["UserName"]);
+            $memberScore = (isset($memberProfile[0]["UserScore"])) ? $memberProfile[0]["UserScore"] : "UserScore unavailable";
+         
+         $data = Array(
+             'UserName' => $_SESSION["UserName"],
+             'UserSecret' => $_SESSION["UserSecret"],
+             'UserToken' => $_SESSION["UserToken"],
+             'UserScore' => $memberScore,
+             'User' => 'Exist'
+         );
+            echo json_encode($data, JSON_PRETTY_PRINT);
+       } else {
+         $data = Array(
+             'UserName' => 'Failed',
+            'User' => 'DoesnotExist'
+         );
+           echo json_encode($data, JSON_PRETTY_PRINT);
+       }
+
+    }
+}
