@@ -3,17 +3,11 @@ namespace Usersystem;
 
 use \Usersystem\Member;
 
-if(isset($_SERVER["HTTP_REFERER"])){
-$restprefix = ($_SERVER['HTTPS'] == 'on') ? "https://" : "http://";
-
-$rest = $restprefix . parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
-} else { $rest = "*";}
-header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Allow-Origin: ' . $rest . '');
+require_once (__DIR__ . "/headerset.php");
 
 
 if(isset($_POST['nameField']) && isset($_POST['passField'])){
-	ini_set('session.cookie_domain', $rest);
+
 	session_start();
 	
 	$username = filter_var($_POST["nameField"], FILTER_SANITIZE_STRING);	
@@ -24,8 +18,6 @@ if(isset($_POST['nameField']) && isset($_POST['passField'])){
 	$member = new Member();
     $isLoggedIn = $member->processLogin($username, $password);
 	
-	
-	
 	 if (! $isLoggedIn) {
         header("Content-Type: application/json");
 		echo json_encode('{"Login": "Failed", "UserID":"Failed","UserName":"Failed", "UserSecret":"Failed", "UserToken":"Failed"}');
@@ -34,6 +26,5 @@ if(isset($_POST['nameField']) && isset($_POST['passField'])){
 		header("Content-Type: application/json");
 		echo json_encode('{"Login": "Success", "SessionId":"'. session_id() .'" ,"UserID":"'. $_SESSION['UserID'] .'","UserName":"'. $_SESSION['UserName'] .'", "UserSecret":"'. $memberProfile[0]['UserSecret'] .'", "UserToken":"'. $memberProfile[0]['UserToken'] .'"}');
 	}
-	
-	
+
 };
