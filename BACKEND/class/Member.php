@@ -67,14 +67,15 @@ class Member
     }
     
     public function processLogin($username, $password) {
-		$queryUserPassworldHash = "select UserPassword FROM " . DataSource::USERTABLE . " WHERE UserName = ?";
+		$queryUserPassworldHash = "select UserPassword, UserName FROM " . DataSource::USERTABLE . " WHERE UserName = ?";
 		$paramTypeForUP = "s";
 		$paramArrayForUP = array($username);
 		$userPassworldHashResult = $this->ds->select($queryUserPassworldHash, $paramTypeForUP, $paramArrayForUP);
 
 		$passwordHash = (isset($userPassworldHashResult[0]['UserPassword'])) ? $userPassworldHashResult[0]['UserPassword'] : "zero";
-
-		if (password_verify($password, $passwordHash)) {
+        $queryedUser = (isset($userPassworldHashResult[0]['UserName'])) ? $userPassworldHashResult[0]['UserName'] : "ThisDoesnotExist";
+				
+		if (password_verify($password, $passwordHash) && $username === $queryedUser) {
         $query = "select * FROM " . DataSource::USERTABLE . " WHERE UserName = ? AND UserPassword = ?";
         $paramType = "ss";
         $paramArray = array($username, $passwordHash);
