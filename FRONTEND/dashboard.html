@@ -5,7 +5,7 @@
   
     <style>
  
- input {
+input {
   padding: 5px; 
   background: #30302d14;
   outline: none;
@@ -74,13 +74,13 @@ input:focus {
     box-shadow: 4px 0px 4px -1px grey;
 }
 
-.actionbuttons:hover {
-    background: #0040ffdb;
-}
-
 .actionbuttons:focus {
      background: grey;
  }
+
+.actionbuttons:hover {
+    background: #0040ffdb;
+}
 
 .buttoncontainer {
   width: 100%;
@@ -156,10 +156,9 @@ input:focus {
 <script>eruda.init();</script>
  -->
 
-
 <script>
   
-//constanes and variables
+  //constanes and variables
 let loginForm = document.querySelector("#loginForm");
 let passField = document.querySelector("#passField");
 let nameField = document.querySelector("#nameField");
@@ -175,24 +174,32 @@ let storedUserScore;
 
 //Login API
 const loginEndpoint = "https://usersystem.mysqhost.tk/api/login.php";
-const memberEndpoint = "https://usersystem.mysqhost.tk/api/member.php";
-const userScoreEndpoint = "https://usersystem.mysqhost.tk/api/userscore.php?userName=";
+const memberEndpoint = "https://usersystem.mysqhost.tk/api/member.php?profile";
+const userScoreEndpoint =
+  "https://usersystem.mysqhost.tk/api/userscore.php?userName=";
 
-initLoginForm()
+initLoginForm();
 
-function initLoginForm(){
- if(checkUserCookiesExist()){
-   userLoggedIn()
- } else { userLogOut() }
+function initLoginForm() {
+  if (checkUserCookiesExist()) {
+    userLoggedIn();
+  } else {
+    userLogOut();
+  }
 }
 
-
-function checkUserCookiesExist(){
- if(document.cookie.indexOf('ui=') === -1 || document.cookie.indexOf('una=') === -1 || document.cookie.indexOf('use=') === -1 || document.cookie.indexOf('utk=') === -1){
-   return false;
- } else { 
-   console.log("YES COOKIES EXIST")
-   return true; }
+function checkUserCookiesExist() {
+  if (
+    document.cookie.indexOf("ui=") === -1 ||
+    document.cookie.indexOf("una=") === -1 ||
+    document.cookie.indexOf("use=") === -1 ||
+    document.cookie.indexOf("utk=") === -1
+  ) {
+    return false;
+  } else {
+    console.log("User cookie exist. User Logged in");
+    return true;
+  }
 }
 
 function loginFormValues() {
@@ -201,9 +208,9 @@ function loginFormValues() {
 }
 
 function loginError() {
-  console.log("Login erererror")
- } 
-              
+  console.log("Login erererror");
+}
+
 function processLogin(nameField, passField) {
   let checkData = checkDatas(nameField, passField);
 
@@ -221,55 +228,55 @@ function processLogin(nameField, passField) {
     };
 
     fetch(loginEndpoint, loginFetchOptions)
-      .then((response) => 
-            { if(response.ok){
-              return response.json()
-            } else { 
-              loginError() 
-            } 
-            }) 
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          loginError();
+        }
+      })
       .then(function (data) {
         console.log(data);
         submitButton.disabled = false;
         storedLoginDatas = JSON.parse(data);
-        
-        if(storedLoginDatas.Login === "Success"){
-          console.log(` Login ${storedLoginDatas.Login}`)
-          createUserCookies()
-          userLoggedIn()
+
+        if (storedLoginDatas.Login === "Success") {
+          console.log(` Login ${storedLoginDatas.Login}`);
+          createUserCookies();
+          userLoggedIn();
         }
-      
-      if(storedLoginDatas.Login === "Failed"){
-        console.log(` Login ${storedLoginDatas.Login}`)
-        showLoginFail()
-      }
-      
-    })
-    .catch(error => { 
-      console.error("Catch error" + error)
-      submitButton.disabled = false;
-      errorBoxCommon.innerHTML = "Server connection error"
-      errorBoxCommon.classList.remove("hidden")
-    } );
-    ;
+
+        if (storedLoginDatas.Login === "Failed") {
+          console.log(` Login ${storedLoginDatas.Login}`);
+          showLoginFail();
+        }
+      })
+      .catch((error) => {
+        console.error("Catch error" + error);
+        submitButton.disabled = false;
+        errorBoxCommon.innerHTML = "Server connection error";
+        errorBoxCommon.classList.remove("hidden");
+      });
   }
 }
 
-function showLoginFail(){
-  errorBoxCommon.innerHTML = "Wrong username or password"
-  errorBoxCommon.classList.remove("hidden")
+function showLoginFail() {
+  errorBoxCommon.innerHTML = "Wrong username or password";
+  errorBoxCommon.classList.remove("hidden");
 }
 
-function createUserCookies(){
-  let stayloggedcheck = document.querySelector("#stayloggedcheck")
+function createUserCookies() {
+  let stayloggedcheck = document.querySelector("#stayloggedcheck");
   var now = new Date();
   var time = now.getTime();
-  var expireTime = time + 1000*400*36000;
+  var expireTime = time + 1000 * 400 * 36000;
   now.setTime(expireTime);
-  
-  let expiration = (stayloggedcheck.checked) ? `expires=${now.toUTCString()};` : "";
-  console.log(`Cookie expirations : ${expiration}`)
-  
+
+  let expiration = stayloggedcheck.checked
+    ? `expires=${now.toUTCString()};`
+    : "";
+  console.log(`Cookie expirations : ${expiration}`);
+
   document.cookie = `ui=${storedLoginDatas.UserID}; ${expiration} path=/; SameSite=None; Secure`;
   document.cookie = `una=${storedLoginDatas.UserName}; ${expiration} path=/; SameSite=None; Secure`;
   document.cookie = `use=${storedLoginDatas.UserSecret}; ${expiration} path=/; SameSite=None; Secure`;
@@ -277,7 +284,7 @@ function createUserCookies(){
   document.cookie = `ses=${storedLoginDatas.SessionId}; ${expiration} path=/; SameSite=None; Secure`;
 }
 
-function deleteUserCookies(){
+function deleteUserCookies() {
   document.cookie = `ui=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=None; Secure`;
   document.cookie = `una=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=None; Secure`;
   document.cookie = `use=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=None; Secure`;
@@ -285,57 +292,63 @@ function deleteUserCookies(){
   document.cookie = `ses=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=None; Secure`;
 }
 
-function userLogOut(){
-  userDatasDiv.classList.add("hidden")
-  userDatasDiv.innerHTML = ""
-  deleteUserCookies()
+function userLogOut() {
+  userDatasDiv.classList.add("hidden");
+  userDatasDiv.innerHTML = "";
+  deleteUserCookies();
   loginFormDiv.classList.remove("hidden");
 }
 
+function userLoggedIn() {
+  let cookieUserName = getCookie("una");
+  let cookieUserId = getCookie("ui");
+  let cookieUserSecret = getCookie("use");
+  let cookieUserToken = getCookie("utk");
+  let cookiePHPses = getCookie("ses");
 
-function userLoggedIn(){
-  let cookieUserName = getCookie("una")
-  let cookieUserId = getCookie("ui")
-  let cookieUserSecret = getCookie("use")
-  let cookieUserToken = getCookie("utk")
-  let cookiePHPses = getCookie("ses")
-  
-  removeAllErrorMessage()
+  removeAllErrorMessage();
   loginFormDiv.classList.add("hidden");
+
+  userDatasDiv.innerHTML = 
+  `<p>WELCOME HERE 
+   <red style="color: red"><b> ${cookieUserName} </b></red> !</p>
+   <p>UID :  ${cookieUserId}</p>
+   <p>USEC :  ${cookieUserSecret}</p>
+   <p>UTOK :  ${cookieUserToken}</p>
+   <p>PHPSES :  ${cookiePHPses}</p>`;
+
+  userDatasDiv.innerHTML +=
+    `<p id="userscoreinprofile">USER SCORE :
+     Loading...<img src="https://bzozoo.github.io/UserSystem/FRONTEND/img/load.webp" /></p>
+     <p><a href="https://codepen.io/bzozoo/full/VwmKOVj">
+     <button class="linkbuttons">SCORE TABLE</button></a></p>
+
+     <p>
+     <div class="buttoncontainer">
+    <input class="actionbuttons" id="logoutButton" name="logoutButton" type="button" value="LOGOUT"         onclick="userLogOut()">
+   </div>
+    </p>`;
+
+  renderUserScoreByName(
+    cookieUserName,
+    document.querySelector("#userscoreinprofile")
+  );
   
+  consoleLogLoggedInUserProfile()
   
-  userDatasDiv.innerHTML = `<p>YOU ARE LOGGED IN AS
-  <red style="color: red"><b> ${cookieUserName} </b></red></p>`
-  userDatasDiv.innerHTML += `<p>UID :  ${cookieUserId}</p>`
-  userDatasDiv.innerHTML += `<p>USEC :  ${cookieUserSecret}</p>`
-  userDatasDiv.innerHTML += `<p>UTOK :  ${cookieUserToken}</p>`
-  userDatasDiv.innerHTML += `<p>PHPSES :  ${cookiePHPses}</p>`
-  
-  userDatasDiv.innerHTML += `<p id="userscoreinprofile">USER SCORE : Loading...<img src="https://bzozoo.github.io/UserSystem/FRONTEND/img/load.webp" /></p>`
-  userDatasDiv.innerHTML += `<p><a target="_new" href="https://codepen.io/bzozoo/full/VwmKOVj">
-  <button class="linkbuttons">SCORE TABLE</button></a>
-  </p>`
-  
-  userDatasDiv.innerHTML += `<p>
-  <div class="buttoncontainer">
-  <input class="actionbuttons" id="logoutButton" name="logoutButton" type="button" value="LOGOUT" onclick="userLogOut()">
-  </div>
-  </p>`
-  
-   renderUserScoreByName(cookieUserName, document.querySelector("#userscoreinprofile"))
-   userDatasDiv.classList.remove("hidden")
+  userDatasDiv.classList.remove("hidden");
 }
 
-async function getUserScoreEndpoint(user){
-    let userScoreFetchOptions = {
+async function getUserScoreEndpoint(user) {
+  let userScoreFetchOptions = {
     method: "GET",
     cache: "no-cache",
     mode: "cors"
   };
-  
-  const response = await fetch(userScoreEndpoint + user, userScoreFetchOptions)
+
+  const response = await fetch(userScoreEndpoint + user, userScoreFetchOptions);
   const responsedjson = await response.json();
-  return responsedjson
+  return responsedjson;
 }
 
 async function getScoreByUsername(uname) {
@@ -344,30 +357,46 @@ async function getScoreByUsername(uname) {
   return userscore;
 }
 
-  
-async function renderUserScoreByName(who, where){
+async function renderUserScoreByName(who, where) {
   let score = await getScoreByUsername(who);
-    where.innerHTML = "USER SCORE : " + score;
+  where.innerHTML = "USER SCORE : " + score;
 }
 
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
+  if (parts.length === 2) return parts.pop().split(";").shift();
 }
 
-function getMember() {
-  let memberFetchOptions = {
-    method: "GET",
-    credentials: "include",
-    mode: "cors"
-  };
+async function sendRequestForActualUserProfile(session){
+  
+    let sessionData = new FormData();
+    sessionData.append("sessid", session);
+  
+    let fetchOptions = {
+      method: "POST",
+      body: sessionData,
+      credentials: "include",
+      mode: "cors",
+      cache: "no-cache"
+    };
+  
+    const response = await fetch(memberEndpoint, fetchOptions);
+    const responsedjson = await response.json();
+    return responsedjson;
+}
 
-  fetch(memberEndpoint, memberFetchOptions)
-    .then((response) => response.text())
-    .then(function (data) {
-      console.log(data);
-    });
+async function getLoggedInUserProfile() {
+  let data = await sendRequestForActualUserProfile(getCookie("ses"));
+  let profile = await data;
+  return profile;
+}
+
+async function consoleLogLoggedInUserProfile(){
+  let profile = await getLoggedInUserProfile()
+  console.log(profile)
+  console.log("User logged in : " + profile.UserName + " - User actual Score : " + profile.UserScore)
+  return profile;
 }
 
 function reqListener() {
@@ -381,8 +410,6 @@ function getMemberX() {
   oReq.withCredentials = true;
   oReq.send();
 }
-
-
 
 function loadXMLDoc(theURL) {
   if (window.XMLHttpRequest) {
@@ -437,7 +464,6 @@ inputBoxes.forEach(function (inputBox) {
 submitButton.addEventListener("click", () =>
   processLogin(nameField.value, passField.value)
 );
-
 
   
 </script>
