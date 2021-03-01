@@ -3,13 +3,8 @@ namespace Usersystem;
 
 class DataSource
 {
-       const HOST = 'localhost'; // Change to Your Own host
-       const USERNAME = 'Your SQL username'; // Change to Your Own Database username
-       const PASSWORD = 'Your SQL userpass'; // Change to Your Own Database password
-       const DATABASENAME = 'Your SQL databasename'; // Change to Your Own Database Name
-	     const USERTABLE = 'Users'; // Change to Your Own Database TABLE Name
-	
-    private $conn;
+   const USERTABLE = 'Users';
+   private $conn;
 
 
     function __construct()
@@ -20,7 +15,8 @@ class DataSource
 
     public function getConnection()
     {
-        $conn = new \mysqli(self::HOST, self::USERNAME, self::PASSWORD, self::DATABASENAME);
+		$dbconf = parse_ini_file("db-config.ini");
+        $conn = new \mysqli($dbconf['host'], $dbconf['dbuser'], $dbconf['dbpass'], $dbconf['dbname']);
         
         if (mysqli_connect_errno()) {
             trigger_error("Problem with connecting to database.");

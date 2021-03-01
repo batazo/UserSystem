@@ -6,8 +6,6 @@ use \Usersystem\DataSource;
 class Member
 {
 
-    private $dbConn;
-
     private $ds;
 
     function __construct()
@@ -38,10 +36,10 @@ class Member
     function checkMemberExist($memberName){
         $query = "select UserName FROM " . DataSource::USERTABLE . " WHERE UserName = ?";
         $paramType = "s";
-        $paramArray = array($memberName);
+        $paramArray = array(trim($memberName));
         $memberResultByName = $this->ds->select($query, $paramType, $paramArray);
         $searchedMember = (isset($memberResultByName[0]['UserName'])) ? $memberResultByName[0]['UserName'] : false;
-        return ($searchedMember !== false && $searchedMember === $memberName) ? "YES" : "NO";
+        return ($searchedMember !== false && $searchedMember === $memberName) ? true : false;
     }
 	
 	function getAllMember(){
@@ -60,10 +58,9 @@ class Member
             $query = "INSERT INTO " . DataSource::USERTABLE . " (UserName, UserPassword, UserSecret, UserToken) VALUES (?, ?, ?, ?)";
             $paramType = "ssii";
             $paramArray = Array($username, $hashed_password, $userSecret, $userToken);
-            $regUserID = $this->ds->insert($query, $paramType, $paramArray);
-            
-            $registration = (isset($regUserID)) ? "Success" : "Failed";
-            return $registration;
+            if($this->ds->insert($query, $paramType, $paramArray)){
+				return true;
+			} else { return false; }
     }
     
     public function processLogin($username, $password) {

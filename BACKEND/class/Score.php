@@ -5,7 +5,6 @@ use \Usersystem\DataSource;
 class Score
 {
 
-    private $dbConn;
 
     private $ds;
 
