@@ -9,9 +9,11 @@ class DataSource
 
     function __construct()
     {
+		if(!isset($wehaveconn)){
         $this->conn = $this->getConnection();
-    }
-
+		$wehaveconn = 1;
+        }
+	}
 
     public function getConnection()
     {
