@@ -10,8 +10,9 @@ require_once (__DIR__ . "/class/Member.php");
 if(isset($_GET['memberCheck'])){
     if($_POST['checkeMember']){
             $member = new Member();
-            $memberName = $_POST['checkeMember'];
+            $memberName = trim($_POST['checkeMember']);
             $checkMember = $member->checkMemberExist($memberName);
+			$checkMember = ($checkMember) ? "YES": "NO";
         echo $checkMember;
     }
 }

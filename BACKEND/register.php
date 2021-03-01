@@ -8,16 +8,17 @@ require_once (__DIR__ . "/headerset.php");
 require_once (__DIR__ . "/class/Member.php");
 
 if(isset($_POST["reguser"]) && isset($_POST["regpwd"])){
-    $regUser = $_POST["reguser"];
+    $regUser = trim($_POST["reguser"]);
     $regPwd = $_POST["regpwd"];
     $member = new Member();
-    $checkExistMember = $member->checkMemberExist($regUser);
+    $existMember = $member->checkMemberExist($regUser);
 
-    if($checkExistMember === "NO"){
+    if(!$existMember){
             $registration = $member->registerUser($regUser, $regPwd);
+			$successCheck = ($registration) ? "Success" : "Failed";
             $data = Array(
                 'UserExist' => "NO",
-                'Registration' => $registration
+                'Registration' => $successCheck
             ); 
         } else {
             $data = Array(
