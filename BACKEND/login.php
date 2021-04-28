@@ -18,13 +18,27 @@ if(isset($_POST['nameField']) && isset($_POST['passField'])){
 	$member = new Member();
     $isLoggedIn = $member->processLogin($username, $password);
 	
+    header("Content-Type: application/json");
+	
 	 if (! $isLoggedIn) {
-        header("Content-Type: application/json");
-		echo json_encode('{"Login": "Failed", "UserID":"Failed","UserName":"Failed", "UserSecret":"Failed", "UserToken":"Failed"}');
+		 
+		 /* $data = Array(
+          'Login' => 'Failed',
+		  'UserID' => 'Failed',
+		  'UserName' => 'Failed',
+		  'UserSecret' => 'Failed',
+		  'UserToken' => 'Failed',
+		 );
+        */
+		$data = '{"Login": "Failed", "UserID":"Failed", "UserName":"Failed", "UserSecret":"Failed", "UserToken":"Failed"}';
+		
     } else {
 	    $memberProfile = $member->getMemberByUNAME($username);
-		header("Content-Type: application/json");
-		echo json_encode('{"Login": "Success", "SessionId":"'. session_id() .'" ,"UserID":"'. $_SESSION['UserID'] .'","UserName":"'. $_SESSION['UserName'] .'", "UserSecret":"'. $memberProfile[0]['UserSecret'] .'", "UserToken":"'. $memberProfile[0]['UserToken'] .'"}');
+		
+		$data = '{"Login": "Success", "SessionId":"'. session_id() .'" ,"UserID":"'. $_SESSION['UserID'] .'","UserName":"'. $_SESSION['UserName'] .'", "UserSecret":"'. $memberProfile[0]['UserSecret'] .'", "UserToken":"'. $memberProfile[0]['UserToken'] .'"}';
 	}
+	
+	$data = json_encode(json_decode($data), JSON_PRETTY_PRINT);
+	echo $data;
 
 };
