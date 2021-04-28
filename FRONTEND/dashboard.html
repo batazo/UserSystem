@@ -157,12 +157,17 @@ input:focus {
  -->
 
 <script>
-  
+ 
   //constanes and variables
 let loginForm = document.querySelector("#loginForm");
-let passField = document.querySelector("#passField");
 let nameField = document.querySelector("#nameField");
+let passField = document.querySelector("#passField");
 let submitButton = document.querySelector("#submitButton");
+let regForm = document.querySelector("#regForm");
+let regNameField = document.querySelector("#regNameField");
+let regPassField = document.querySelector("#regPassField");
+let regConfirmPassField = document.querySelector("#regConfirmPassField");
+let regSubmitButton = document.querySelector("#regSubmitButton");
 const errorBoxCommon = document.querySelector("#errorBoxCommon");
 const errorBoxName = document.querySelector("#errorBoxName");
 const errorBoxPass = document.querySelector("#errorBoxPass");
@@ -219,7 +224,8 @@ function processLogin(nameField, passField) {
     var formData = new FormData();
     formData.append("nameField", nameField);
     formData.append("passField", passField);
-
+    //console.log(formData)
+    
     let loginFetchOptions = {
       method: "POST",
       credentials: "include",
@@ -236,9 +242,11 @@ function processLogin(nameField, passField) {
         }
       })
       .then(function (data) {
+        console.log("I got DATAS : ");
         console.log(data);
         submitButton.disabled = false;
-        storedLoginDatas = JSON.parse(data);
+        storedLoginDatas = data;
+        //  storedLoginDatas = JSON.parse(data);
 
         if (storedLoginDatas.Login === "Success") {
           console.log(` Login ${storedLoginDatas.Login}`);
@@ -260,9 +268,83 @@ function processLogin(nameField, passField) {
   }
 }
 
+function checkDatas(nameField, passField) {
+  let valueLengthOfPass = document.querySelector("#passField").value.length;
+  if (valueLengthOfPass < 8) {
+    errorBoxPass.innerHTML = "The password must be 8 characters long ";
+    errorBoxPass.classList.remove("hidden");
+  }
+
+  if (nameField === "") {
+    errorBoxName.innerHTML = "Name is empty";
+    errorBoxName.classList.remove("hidden");
+  }
+
+  if (passField === "") {
+    errorBoxPass.innerHTML = "Password is empty";
+    errorBoxPass.classList.remove("hidden");
+  }
+
+  if (passField != "" && nameField != "" && valueLengthOfPass >= 8) {
+    return true;
+  }
+}
+
+function checkRegDatas(regNameFieldValue, regPassFieldValue, regConfirmPassFieldValue){
+   let valueLengthOfRegPass = document.querySelector("#regPassField").value.length;
+  
+    if (valueLengthOfRegPass < 8) {
+    errorBoxRegPass.innerHTML = "The register password must be 8 characters long ";
+    errorBoxRegPass.classList.remove("hidden");
+  }
+  
+  if(regPassFieldValue != regConfirmPassFieldValue){
+    errorBoxRegConfirmPass.innerHTML = "The passwords do not match ";
+    errorBoxRegConfirmPass.classList.remove("hidden");
+  }
+  
+    if (regNameFieldValue === "") {
+    errorBoxRegName.innerHTML = "Name field is empty";
+    errorBoxRegName.classList.remove("hidden");
+  }
+  
+    if (regPassFieldValue === "") {
+    errorBoxRegPass.innerHTML = "Password field is empty";
+    errorBoxRegPass.classList.remove("hidden");
+  }
+  
+      if (regConfirmPassFieldValue === "") {
+    errorBoxRegConfirmPass.innerHTML = "Confirm Password field is empty";
+    errorBoxRegConfirmPass.classList.remove("hidden");
+  }
+  
+    if (regPassFieldValue === regConfirmPassFieldValue && regNameFieldValue != "" && regPassFieldValue != "" && valueLengthOfRegPass >= 8) {
+    return true;
+  }
+  
+}
+
 function showLoginFail() {
   errorBoxCommon.innerHTML = "Wrong username or password";
   errorBoxCommon.classList.remove("hidden");
+}
+
+function processRegister(
+  regNameFieldValue,
+  regPassFieldValue,
+  regConfirmPassFieldValue
+) {
+  console.log("Register process...");
+  console.log(
+    `${regNameFieldValue} - ${regPassFieldValue} - ${regConfirmPassFieldValue}`
+  );
+    
+    let checkRegData = checkRegDatas(regNameFieldValue, regPassFieldValue, regConfirmPassFieldValue)
+    
+     if (checkRegData) {
+       console.log('All Reg Data is correct...')
+     }
+    
 }
 
 function createUserCookies() {
@@ -309,16 +391,14 @@ function userLoggedIn() {
   removeAllErrorMessage();
   loginFormDiv.classList.add("hidden");
 
-  userDatasDiv.innerHTML = 
-  `<p>WELCOME HERE 
+  userDatasDiv.innerHTML = `<p>WELCOME HERE 
    <red style="color: red"><b> ${cookieUserName} </b></red> !</p>
    <p>UID :  ${cookieUserId}</p>
    <p>USEC :  ${cookieUserSecret}</p>
    <p>UTOK :  ${cookieUserToken}</p>
    <p>PHPSES :  ${cookiePHPses}</p>`;
 
-  userDatasDiv.innerHTML +=
-    `<p id="userscoreinprofile">USER SCORE :
+  userDatasDiv.innerHTML += `<p id="userscoreinprofile">USER SCORE :
      Loading...<img src="https://bzozoo.github.io/UserSystem/FRONTEND/img/load.webp" /></p>
      <p><a href="https://codepen.io/bzozoo/full/VwmKOVj">
      <button class="linkbuttons">SCORE TABLE</button></a></p>
@@ -333,9 +413,9 @@ function userLoggedIn() {
     cookieUserName,
     document.querySelector("#userscoreinprofile")
   );
-  
-  consoleLogLoggedInUserProfile()
-  
+
+  consoleLogLoggedInUserProfile();
+
   userDatasDiv.classList.remove("hidden");
 }
 
@@ -368,22 +448,21 @@ function getCookie(name) {
   if (parts.length === 2) return parts.pop().split(";").shift();
 }
 
-async function sendRequestForActualUserProfile(session){
-  
-    let sessionData = new FormData();
-    sessionData.append("sessid", session);
-  
-    let fetchOptions = {
-      method: "POST",
-      body: sessionData,
-      credentials: "include",
-      mode: "cors",
-      cache: "no-cache"
-    };
-  
-    const response = await fetch(memberEndpoint, fetchOptions);
-    const responsedjson = await response.json();
-    return responsedjson;
+async function sendRequestForActualUserProfile(session) {
+  let sessionData = new FormData();
+  sessionData.append("sessid", session);
+
+  let fetchOptions = {
+    method: "POST",
+    body: sessionData,
+    credentials: "include",
+    mode: "cors",
+    cache: "no-cache"
+  };
+
+  const response = await fetch(memberEndpoint, fetchOptions);
+  const responsedjson = await response.json();
+  return responsedjson;
 }
 
 async function getLoggedInUserProfile() {
@@ -392,10 +471,15 @@ async function getLoggedInUserProfile() {
   return profile;
 }
 
-async function consoleLogLoggedInUserProfile(){
-  let profile = await getLoggedInUserProfile()
-  console.log(profile)
-  console.log("User logged in : " + profile.UserName + " - User actual Score : " + profile.UserScore)
+async function consoleLogLoggedInUserProfile() {
+  let profile = await getLoggedInUserProfile();
+  console.log(profile);
+  console.log(
+    "User logged in : " +
+      profile.UserName +
+      " - User actual Score : " +
+      profile.UserScore
+  );
   return profile;
 }
 
@@ -428,27 +512,7 @@ function loadXMLDoc(theURL) {
   xmlhttp.send();
 }
 
-function checkDatas(nameField, passField) {
-  let valueLengthOfPass = document.querySelector("#passField").value.length;
-  if (valueLengthOfPass < 8) {
-    errorBoxPass.innerHTML = "The password must be 8 characters long ";
-    errorBoxPass.classList.remove("hidden");
-  }
 
-  if (nameField === "") {
-    errorBoxName.innerHTML = "Name is empty";
-    errorBoxName.classList.remove("hidden");
-  }
-
-  if (passField === "") {
-    errorBoxPass.innerHTML = "Password is empty";
-    errorBoxPass.classList.remove("hidden");
-  }
-
-  if (passField != "" && nameField != "" && valueLengthOfPass >= 8) {
-    return true;
-  }
-}
 
 function removeAllErrorMessage() {
   errorBoxes.forEach(function (errorBox) {
@@ -465,7 +529,15 @@ submitButton.addEventListener("click", () =>
   processLogin(nameField.value, passField.value)
 );
 
-  
+regSubmitButton.addEventListener("click", () =>
+  processRegister(
+    regNameField.value,
+    regPassField.value,
+    regConfirmPassField.value
+  )
+);
+
+ 
 </script>
 
 
