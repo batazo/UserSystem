@@ -1,5 +1,5 @@
 input {
-  padding: 5px; 
+  padding: 5px;
   background: #30302d14;
   outline: none;
   font-size: 18px;
@@ -24,24 +24,42 @@ input:focus {
   padding: 10px;
   border-radius: 6px;
   box-shadow: 4px 4px 40px -10px grey;
-   -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
 }
 
 .errorBox {
   margin-top: 5px;
   padding: 3px;
-  background: #F7C8C8;
+  background: #f7c8c8;
   width: 97%;
   heigth: 20px;
   border: red 1px solid;
   border-radius: 3px;
   color: red;
+}
+
+.progressBox {
+  background: #d6eaf8;
+  margin-bottom: 10px;
+  color: blue;
+  border: blue 1px solid;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+.regSuccessBox {
+  background: #97ec57;
+  margin-top: 10px;
+  color: green;
+  border: green 1px solid;
+  padding: 5px;
+  border-radius: 3px;
 }
 
 .conwidth {
@@ -62,17 +80,17 @@ input:focus {
 }
 
 .actionbuttons:active {
-    transform: translateY(4px);
-    background: #0040ffdb;
-    box-shadow: 4px 0px 4px -1px grey;
+  transform: translateY(4px);
+  background: #0040ffdb;
+  box-shadow: 4px 0px 4px -1px grey;
 }
 
 .actionbuttons:focus {
-     background: grey;
- }
+  background: grey;
+}
 
 .actionbuttons:hover {
-    background: #0040ffdb;
+  background: #0040ffdb;
 }
 
 .buttoncontainer {
@@ -94,16 +112,16 @@ input:focus {
 }
 
 .linkbuttons:active {
-    transform: translateY(4px);
-    background: #ff0000cc;
-    box-shadow: 4px 0px 4px -1px grey;
+  transform: translateY(4px);
+  background: #ff0000cc;
+  box-shadow: 4px 0px 4px -1px grey;
 }
 
 .linkbuttons:hover {
-    background: #ff0000cc;
+  background: #ff0000cc;
 }
 
-#userscoreinprofile img{
+#userscoreinprofile img {
   width: 20px;
   heigth: 20px;
 }

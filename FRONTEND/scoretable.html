@@ -4,8 +4,8 @@
   
   
     <style>
-   
-   #scoreTable {
+  
+  #scoreTable {
   font-family: arial, sans-serif;
   font-size: 20px;
   border-collapse: collapse;
@@ -37,15 +37,13 @@
 
 
 #scoreTable tr:hover {background-color: #ddd;}
-   
-   
+
     </style>
   
   </head>
   <body>
-
-
-<table id="scoreTable">
+  
+  <table id="scoreTable">
   <tbody>
   <!-- Scores -->
   <tr>
@@ -58,8 +56,8 @@
  </tbody>
 </table>
 
-<script>
 
+<script>
 const scoreTable = document.querySelector("#scoreTable");
 const url = "https://usersystem.mysqhost.tk/api/userscore.php";
 let actualUser = "Bzozoo";
@@ -67,9 +65,35 @@ let actualUser = "Bzozoo";
 let storedDatas;
 let dataByScore;
 
+function init(url){
+  console.log(`Init script from : ${url}`)
 fetch(url, { method: "GET", mode: "cors", cache: "no-cache" })
   .then((response) => response.json())
-  .then((data) => getData(data));
+  .then((data) => getData(data))
+  .catch((error) => serverError(error))
+}
+
+init(url)
+
+function serverError(error){
+  console.log(error)
+  printErrorToHTML(scoreTable.tBodies[0], error)
+}
+
+function printErrorToHTML(where, what){
+       removeErrorRow()
+  
+       where.innerHTML += `
+        <tr id="errorRow">
+          <td> SERVER CONNECTION ERROR  </td>
+          <td> ${what} <br><button onclick="init('${url}')">Please refresh page</button></td>
+        </tr>`;
+}
+
+function removeErrorRow(){
+       let errorRow = document.querySelector("#errorRow");
+       if(errorRow){ errorRow.remove()}
+}
 
 function getData(data) {
   storedDatas = data;
@@ -86,6 +110,7 @@ function getData(data) {
 }
 
 function printDataToHTML(where, what) {
+  removeErrorRow()
   what.forEach(function (element) {
     where.innerHTML += `
         <tr>
@@ -135,10 +160,7 @@ function sortTable() {
     })
   );
 }
-
-
 </script>
-
 
 </body>
 </html>

@@ -8,8 +8,6 @@
   </head>
   <body>
 
-
-
 <div id="container">
   <div id="loginFormDiv">
     <form id="loginForm" name="loginForm" action="">
@@ -29,6 +27,7 @@
       </p>
       <p>
       <div class="buttoncontainer">
+        <div id="loginProgressBox" class="progressBox hidden">Login in progress ...<img src="https://bzozoo.github.io/UserSystem/FRONTEND/img/load.webp" width=18px /></div>
         <input class="actionbuttons" type="button" id="submitButton" name="submitButton" value="LOGIN">
       </div>
       </p>
@@ -55,10 +54,13 @@
         <input type="password" id="regConfirmPassField" class="conwidth" name="regConfirmPassField" autocomplete="new-password" minlength="8" required>
       <div id="errorBoxRegConfirmPass" class="errorBox hidden"></div>
       </p>
-      
+
       <p>
       <div class="buttoncontainer">
+        <div id="regProgressBox" class="progressBox hidden">Registration in progress ...<img src="https://bzozoo.github.io/UserSystem/FRONTEND/img/load.webp" width=18px /></div>
         <input class="actionbuttons" type="button" id="regSubmitButton" name="regSubmitButton" value="REGISER">
+        <div id="regSuccessBox" class="regSuccessBox hidden">Registration success! You can Log In! </div>
+        <div id="errorBoxReg" class="errorBox hidden"></div>
       </div>
       </p>
     </form>
