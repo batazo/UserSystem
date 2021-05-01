@@ -26,6 +26,8 @@ if(isset($_POST["reguser"]) && isset($_POST["regpwd"])){
                 'Registration' => "Failed"
             );
         };
-    }
-    
+
     echo json_encode($data, JSON_PRETTY_PRINT);
+}
+    
+

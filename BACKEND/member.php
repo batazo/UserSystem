@@ -33,6 +33,7 @@ if(isset($_GET['profile'])){
          
          $data = Array(
              'UserName' => $_SESSION["UserName"],
+			 'UserRegistredAt' => $memberProfile[0]["UserRegTime"],
              'UserSecret' => $_SESSION["UserSecret"],
              'UserToken' => $_SESSION["UserToken"],
              'UserScore' => $memberScore,
@@ -41,7 +42,7 @@ if(isset($_GET['profile'])){
             echo json_encode($data, JSON_PRETTY_PRINT);
        } else {
          $data = Array(
-             'UserName' => 'Failed',
+            'UserName' => 'Failed',
             'User' => 'DoesnotExist'
          );
            echo json_encode($data, JSON_PRETTY_PRINT);
@@ -63,6 +64,7 @@ if(isset($_GET['profile-local'])){
          
          $data = Array(
              'UserName' => $_SESSION["UserName"],
+			 'UserRegistredAt' => $memberProfile[0]["UserRegTime"],
              'UserSecret' => $_SESSION["UserSecret"],
              'UserToken' => $_SESSION["UserToken"],
              'UserScore' => $memberScore,
@@ -71,7 +73,7 @@ if(isset($_GET['profile-local'])){
             echo json_encode($data, JSON_PRETTY_PRINT);
        } else {
          $data = Array(
-             'UserName' => 'Failed',
+            'UserName' => 'Failed',
             'User' => 'DoesnotExist'
          );
            echo json_encode($data, JSON_PRETTY_PRINT);

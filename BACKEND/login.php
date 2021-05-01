@@ -30,12 +30,12 @@ if(isset($_POST['nameField']) && isset($_POST['passField'])){
 		  'UserToken' => 'Failed',
 		 );
         */
-		$data = '{"Login": "Failed", "UserID":"Failed", "UserName":"Failed", "UserSecret":"Failed", "UserToken":"Failed"}';
+		$data = '{"Login": "Failed", "UserID":"Failed", "UserName":"Failed", "UserRegistredAt":"Failed", "UserSecret":"Failed", "UserToken":"Failed"}';
 		
     } else {
 	    $memberProfile = $member->getMemberByUNAME($username);
 		
-		$data = '{"Login": "Success", "SessionId":"'. session_id() .'" ,"UserID":"'. $_SESSION['UserID'] .'","UserName":"'. $_SESSION['UserName'] .'", "UserSecret":"'. $memberProfile[0]['UserSecret'] .'", "UserToken":"'. $memberProfile[0]['UserToken'] .'"}';
+		$data = '{"Login": "Success", "SessionId":"'. session_id() .'" ,"UserID":"'. $_SESSION['UserID'] .'","UserName":"'. $_SESSION['UserName'] .'", "UserRegistredAt":"'. $memberProfile[0]['UserRegTime'] .'", "UserSecret":"'. $memberProfile[0]['UserSecret'] .'", "UserToken":"'. $memberProfile[0]['UserToken'] .'"}';
 	}
 	
 	$data = json_encode(json_decode($data), JSON_PRETTY_PRINT);
