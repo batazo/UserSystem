@@ -151,3 +151,63 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 			});
   
 ```
+
+##### SEND DATA FOR USER PROFILE #####
+```
+async function sendRequestForActualUserProfile(session) {
+	let sessionData = new FormData();
+	sessionData.append("sessid", session);
+
+	let fetchOptions = {method: "POST", body: sessionData,	credentials: "include",	mode: "cors", cache: "no-cache"};
+        let memberEndpoint = "YOURSERVERPATH/BACKEND/member.php?profile"
+	
+	let responsedjson = false;
+	try {
+		const response = await fetch(memberEndpoint, fetchOptions);
+		responsedjson = await response.json();
+	} catch (error) {
+		console.log("Error in member request");
+		console.log(Error);
+		responsedjson = false;
+	}
+	return responsedjson;
+}
+
+async function getLoggedInUserProfile(session) {
+	let data = await sendRequestForActualUserProfile(session));
+	let profile = await data;
+	return profile;
+}
+
+let sessionFromCookie = 'SESSION COOKIE SESSION HASH'
+let actualUserProfileDatas = await getLoggedInUserProfile(sessionFromCookie)
+```
+##### SEND DATA FOR USER SCORE BY NAME #####
+```
+async function getUserScoreEndpoint(user) {
+	let userScoreFetchOptions = {method: "GET", cache: "no-cache", mode: "cors"};
+        
+	let userScoreEndpoint = 'YOURSERVERPATH/BACKEND/userscore.php?userName='
+	let responsedjson = false;
+	try {
+		const response = await fetch(userScoreEndpoint + user, userScoreFetchOptions);
+		responsedjson = await response.json();
+	} catch (error) {
+		console.log("Error in getScore");
+	}
+	return responsedjson;
+}
+
+async function getScoreByUsername(uname) {
+	let user = await getUserScoreEndpoint(uname);
+	let userscore = "Server unavailable";
+	if (user) {
+		userscore = await user.UserScore;
+	}
+	return userscore;
+}
+
+let uname = 'USERNAME is the name of the user whose score information We want to retrieve'
+let scoreOfName = await getScoreByUsername(uname)
+
+```
