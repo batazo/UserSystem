@@ -16,5 +16,5 @@ User Dasboard. User handler system with JSON api and Fetch API frontend
 
 ## API USAGE (BACKEND)
 ##### CALL FOR LOGIN #####
-<ins>Endpoint</ins> [BACKEND/login.php](BACKEND/login.php)
+<ins>Endpoint</ins> [BACKEND/login.php](BACKEND/login.php) .
 Login endpoint waits `$_POST['nameField']` and `$_POST['passField']` datas in `POST` method
