@@ -70,15 +70,10 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
     let nameField = 'PASSWORD FOR LOGIN'
     
   	var formData = new FormData();
-		formData.append("nameField", nameField);
-		formData.append("passField", passField);
+	    formData.append("nameField", nameField);
+	    formData.append("passField", passField);
     
-   	let loginFetchOptions = {
-			method: "POST",
-			credentials: "include",
-			mode: "cors",
-			body: formData
-		};
+   	let loginFetchOptions = {method: "POST", credentials: "include", mode: "cors", body: formData};
     
     let loginEndpoint = 'YOURSERVERPATH/BACKEND/login.php'
     
@@ -151,7 +146,8 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 				
 			})
 			.catch((error) => {
-			
+			        console.error("Catch error" + error);
+				// Do something if you got an error in connection
 			});
   
 ```
