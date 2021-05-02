@@ -49,7 +49,7 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
  <ins>Endpoint:</ins> [BACKEND/member.php?profile](BACKEND/member.php)
  - Member endpoint waits `$_POST['sessid']` data from frontend
  - If this session does not exist in the server, the member endpoint will return with this JSON object:
-   ´´´
+   ```
      { 'UserName' : 'Failed', 'User' : 'DoesnotExist' }
    ```
  -  If this session does not exist in the server, the member endpoint will return same datas as the login endpoint.
