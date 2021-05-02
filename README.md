@@ -60,4 +60,4 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 
 ##### CALL FOR USER SCORES #####
 <ins>Endpoint:</ins> [BACKEND/userscore.php?userName=USERNAME][BACKEND/userscore.php] (where USERNAME is the name of the user whose score information I want to retrieve )
-- This endpoint waits `$_GET["userName"]` datas in `GET` method and it will return with `{ 'UserName' : 'USERNAME', 'UserScore' : 'USERSCORE'}` object if user exists and `{"UserName": "UserName does not exist", "UserScore":"UserScore does not exist"}` if user does not exist
+- This endpoint waits `$_GET["userName"]` datas in `GET` method and it will return with `{ 'UserName' : 'USERNAME', 'UserScore' : 'USERSCORE'}` object if user exists and with `{"UserName": "UserName does not exist", "UserScore":"UserScore does not exist"}` object if user does not exist
