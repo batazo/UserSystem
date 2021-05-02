@@ -1,5 +1,5 @@
 # UserSystem
-User Dasboard. User handler system with JSON api and Fetch API frontend
+User Dasboard. User handler system with JSON api (PHP based backend) and Fetch API (Javascript based frontend)
 
 ## System Reuirements:
 * PHP 5.6 - PHP 7.4
@@ -35,3 +35,25 @@ User Dasboard. User handler system with JSON api and Fetch API frontend
   ```
   {'UserExist' : "YES", 'Registration' : "Failed"}
   ```
+- If User does not exist in system but there are an other error, the register endpoint will return with this JSON object:
+  ```
+  {'UserExist' : "NO", 'Registration' : "Failed"}
+  ```
+- If User does not exist and there are not an other error, the register endpoint will return with this JSON object:
+  ```
+  {'UserExist' : "NO", 'Registration' : "Success"}
+  ```
+  In this case, the registration will be complete.
+ 
+ ##### CALL FOR MEMBER DATAS #####
+ <ins>Endpoint:</ins> [BACKEND/member.php?profile](BACKEND/member.php)
+ - Member endpoint waits `$_POST['sessid']` data from frontend
+ - If this session does not exist in the server, the member endpoint will return with this JSON object:
+   ´´´
+     { 'UserName' : 'Failed', 'User' : 'DoesnotExist' }
+   ```
+   -  If this session does not exist in the server, the member endpoint will return same datas as the login endpoint.
+  <ins>Endpoint:</ins> [BACKEND/member.php?profile-local](BACKEND/member.php)
+  - If the frontend are on same server if the frontend is on the same server as the backend, this endpoint will use the PHPSESSION cookie datas and it will return same data as login endpoint
+<ins>Endpoint:</ins> [BACKEND/member.php?memberCheck](BACKEND/member.php)
+- This endpoint waits `$_POST['checkeMember']` data in `POST` method and it will return with simple YES or NO in text format, depending on user exists or does not exist
