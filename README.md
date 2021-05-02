@@ -15,3 +15,5 @@ User Dasboard. User handler system with JSON api and Fetch API frontend
 * Set your own database connection datas in [private/db-config.ini](private/db-config.ini) file
 
 ## API USAGE (BACKEND)
+##### CALL FOR LOGIN #####
+<ins>Endpoint</ins> [BACKEND/login.php](BACKEND/login.php)
