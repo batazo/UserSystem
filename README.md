@@ -2,7 +2,7 @@
 User Dasboard. User handler system
 
 ## System Reuirements:
-* PHP 5.6
+* PHP 5.6 - PHP 7.4
 * MySQL
 
 ## INSTALLATION:
