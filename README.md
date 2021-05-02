@@ -1,5 +1,5 @@
 # UserSystem
-User Dasboard. User handler system
+User Dasboard. User handler system with JSON api and Fetch API frontend
 
 ## System Reuirements:
 * PHP 5.6 - PHP 7.4
