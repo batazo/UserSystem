@@ -52,7 +52,7 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
    ´´´
      { 'UserName' : 'Failed', 'User' : 'DoesnotExist' }
    ```
-   -  If this session does not exist in the server, the member endpoint will return same datas as the login endpoint.
+ -  If this session does not exist in the server, the member endpoint will return same datas as the login endpoint.
   <ins>Endpoint:</ins> [BACKEND/member.php?profile-local](BACKEND/member.php)
   - If the frontend are on same server if the frontend is on the same server as the backend, this endpoint will use the PHPSESSION cookie datas and it will return same data as login endpoint
 <ins>Endpoint:</ins> [BACKEND/member.php?memberCheck](BACKEND/member.php)
