@@ -63,7 +63,7 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 <ins>Endpoint:</ins> [BACKEND/userscore.php?userName=USERNAME][BACKEND/userscore.php] (where USERNAME is the name of the user whose score information I want to retrieve )
 - This endpoint waits `$_GET["userName"]` datas in `GET` method and it will return with `{ 'UserName' : 'USERNAME', 'UserScore' : 'USERSCORE'}` object if user exists and with `{"UserName": "UserName does not exist", "UserScore":"UserScore does not exist"}` object if user does not exist
 
-## FetchAPI USAGE (FRONTEND)
+## JavaScript/FetchAPI USAGE (FRONTEND)
 ##### SEND DATA FOR LOGIN #####
 ```
     let nameField = 'USERNAME FOR LOGIN'
@@ -110,4 +110,48 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 				// Do something if you got an error
 			});
     
+```
+
+
+##### SEND DATA FOR REGISTRATION #####
+```
+  let regNameFieldValue = 'NAME OF USER, WE WATNT TO REGISTER'
+  let regPassFieldValue = 'PASSWORD OF USER, WE WATNT TO REGISTER'
+  
+  var formData = new FormData();
+  formData.append("reguser", regNameFieldValue);
+  formData.append("regpwd", regPassFieldValue);
+  
+  let regFetchOptions = {method: "POST", credentials: "include", mode: "cors", body: formData};
+  
+  const regEndpoint = "YOURSERVERPATH/BACKEND/register.php";
+  
+  fetch(regEndpoint, regFetchOptions)
+			.then((response) => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					// Do something, if response is not ok
+				}
+			})
+			.then(function (data) {
+			
+			  	if (data.UserExist === "NO" && data.Registration === "Success") {
+                               // Do something, if user registration is success
+			       }
+			       			       
+			  	if (data.UserExist === "YES" && data.Registration === "Failed") {
+                               // Do something, if user registration is failed, becouse User is already exist
+			       }
+			       
+			       			
+			  	if (data.UserExist === "NO" && data.Registration === "Failed") {
+                               // Do something, if user registration is failed, becouse there are other problem
+			       }
+				
+			})
+			.catch((error) => {
+			
+			});
+  
 ```
