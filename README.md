@@ -16,7 +16,7 @@ User Dasboard. User handler system with JSON api and Fetch API frontend
 
 ## API USAGE (BACKEND)
 ##### CALL FOR LOGIN #####
-<ins>Endpoint</ins> [BACKEND/login.php](BACKEND/login.php) .
+<ins>Endpoint:</ins> [BACKEND/login.php](BACKEND/login.php) .
 - Login endpoint waits `$_POST['nameField']` and `$_POST['passField']` datas in `POST` method
 - If Username and Password is not found in database , the login endpoint will return with this object:
   ``` 
@@ -27,3 +27,6 @@ User Dasboard. User handler system with JSON api and Fetch API frontend
   '{"Login": "Success", "SessionId":"'. session_id() .'" ,"UserID":"'. $_SESSION['UserID'] .'","UserName":"'. $_SESSION['UserName'] .'", "UserRegistredAt":"'. $memberProfile[0]['UserRegTime'] .'", "UserSecret":"'. $memberProfile[0]['UserSecret'] .'", "UserToken":"'. $memberProfile[0]['UserToken'] .'"}'
   ```
   Where `session_id()` is session of logged-in user, `$_SESSION['UserID']` ID of logged-in user, `$_SESSION['UserName']` Name of logged-in user, `$memberProfile[0]['UserRegTime']` is registration date and time of logged-in user, `$memberProfile[0]['UserSecret']` is Secret token of logged-in user, `$memberProfile[0]['UserToken']` is a general token of logged-in user
+
+##### CALL FOR USER REGISTRATION #####
+<ins>Endpoint:</ins> [BACKEND/register.php](BACKEND/register.php)
