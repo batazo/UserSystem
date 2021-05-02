@@ -18,11 +18,11 @@ User Dasboard. User handler system with JSON api and Fetch API frontend
 ##### CALL FOR LOGIN #####
 <ins>Endpoint:</ins> [BACKEND/login.php](BACKEND/login.php) .
 - Login endpoint waits `$_POST['nameField']` and `$_POST['passField']` datas in `POST` method
-- If Username and Password is not found in database , the login endpoint will return with this object:
+- If Username and Password is not found in database , the login endpoint will return with this JSON object:
   ``` 
   '{"Login": "Failed", "UserID":"Failed", "UserName":"Failed", "UserRegistredAt":"Failed", "UserSecret":"Failed", "UserToken":"Failed"}'
   ```
-- If Username and Password is match , the login endpoint will return with this object:
+- If Username and Password is match , the login endpoint will return with this JSON object:
   ```
   '{"Login": "Success", "SessionId":"'. session_id() .'" ,"UserID":"'. $_SESSION['UserID'] .'","UserName":"'. $_SESSION['UserName'] .'", "UserRegistredAt":"'. $memberProfile[0]['UserRegTime'] .'", "UserSecret":"'. $memberProfile[0]['UserSecret'] .'", "UserToken":"'. $memberProfile[0]['UserToken'] .'"}'
   ```
@@ -30,3 +30,8 @@ User Dasboard. User handler system with JSON api and Fetch API frontend
 
 ##### CALL FOR USER REGISTRATION #####
 <ins>Endpoint:</ins> [BACKEND/register.php](BACKEND/register.php)
+- Register endpoint waits `$_POST["reguser"]` and `$_POST["regpwd"]` datas in `POST` method
+- If User exists, the registration will be failed and the regitration endpoint will return with this JSON object:
+  ```
+  {'UserExist' : "YES", 'Registration' : "Failed"}
+  ```
