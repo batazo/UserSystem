@@ -57,3 +57,7 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
   - If the frontend are on same server if the frontend is on the same server as the backend, this endpoint will use the PHPSESSION cookie datas and it will return same data as login endpoint
 <ins>Endpoint:</ins> [BACKEND/member.php?memberCheck](BACKEND/member.php)
 - This endpoint waits `$_POST['checkeMember']` data in `POST` method and it will return with simple YES or NO in text format, depending on user exists or does not exist
+
+##### CALL FOR USER SCORES #####
+<ins>Endpoint:</ins> [BACKEND/userscore.php?userName=USERNAME][BACKEND/userscore.php] (where USERNAME is the name of the user whose score information I want to retrieve )
+- This endpoint waits `$_GET["userName"]` datas in `GET` method and it will return with `{ 'UserName' : 'USERNAME', 'UserScore' : 'USERSCORE'}` object if user exists and `{"UserName": "UserName does not exist", "UserScore":"UserScore does not exist"}` if user does not exist
