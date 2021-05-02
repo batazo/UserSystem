@@ -64,3 +64,50 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 - This endpoint waits `$_GET["userName"]` datas in `GET` method and it will return with `{ 'UserName' : 'USERNAME', 'UserScore' : 'USERSCORE'}` object if user exists and with `{"UserName": "UserName does not exist", "UserScore":"UserScore does not exist"}` object if user does not exist
 
 ## FetchAPI USAGE (FRONTEND)
+##### SEND DATA FOR LOGIN #####
+```
+    let nameField = 'USERNAME FOR LOGIN'
+    let nameField = 'PASSWORD FOR LOGIN'
+    
+  	var formData = new FormData();
+		formData.append("nameField", nameField);
+		formData.append("passField", passField);
+    
+   	let loginFetchOptions = {
+			method: "POST",
+			credentials: "include",
+			mode: "cors",
+			body: formData
+		};
+    
+    let loginEndpoint = 'YOURSERVERPATH/BACKEND/login.php'
+    
+    fetch(loginEndpoint, loginFetchOptions)
+			.then((response) => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					// do something if response not ok
+				}
+			})
+			.then(function (data) {
+				console.log("I got login DATAS : ");
+				console.log(data);
+				
+				storedLoginDatas = data;
+				
+
+				if (storedLoginDatas.Login === "Success") {
+					// Do something if login success
+				}
+
+				if (storedLoginDatas.Login === "Failed") {
+					// Do something if login failed
+				}
+			})
+			.catch((error) => {
+				console.error("Catch error" + error);
+				// Do something if you got an error
+			});
+    
+```
