@@ -207,7 +207,7 @@ async function getScoreByUsername(uname) {
 	return userscore;
 }
 
-let uname = 'USERNAME is the name of the user whose score information We want to retrieve'
+let uname = 'Name of the user whose score information We want to retrieve'
 let scoreOfName = await getScoreByUsername(uname)
 
 ```
