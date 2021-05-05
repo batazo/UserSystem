@@ -1,6 +1,9 @@
 # UserSystem
 User Dasboard. User handler system with JSON api (PHP based backend) and Fetch API (Javascript based frontend)
 
+## This project is currently under development.
+Expect heavy code breaking changes.
+
 ## System Reuirements:
 * PHP 5.6 - PHP 7.4
 * MySQL
@@ -8,11 +11,16 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 
 ## INSTALLATION:
 * Clone or download package
+* Use `composer install` to initialize the project 
 * Create a database on your hosting or own server and run SQL code from [/install/install.sql](/install/install.sql) file
 * You can create the structure in Phpmyadmin too
 ![Database structure](/install/table-structure.jpg?raw=true)
 * Set Admin password in 'UserPassword' column in database. Use a passwordhash generator
 * Set your own database connection datas in [private/db-config.ini](private/db-config.ini) file
+
+> I've created an index.php file inside the public folder to create an single entry
+> point for this project. If you go to the public folder and use `php -S localhost:8080`
+> u can fire up the project. Can be reached at http://localhost:8080
 
 ## API USAGE (BACKEND)
 ##### CALL FOR LOGIN #####
