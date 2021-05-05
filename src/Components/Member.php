@@ -1,38 +1,61 @@
 <?php
-namespace Usersystem;
 
-use \Usersystem\DataSource;
+namespace UserSystem\Components;
 
-class Member
+use UserSystem\Component;
+use UserSystem\Components\DataSource;
+
+/**
+ * Class Member
+ * @package UserSystem\Components
+ */
+class Member extends Component
 {
 
+    /**
+     * @var \UserSystem\Components\DataSource
+     */
     private $ds;
 
+    /**
+     * Member constructor.
+     */
     function __construct()
     {
-        require_once "DataSource.php";
         $this->ds = new DataSource();
     }
 
+    /**
+     * @param $memberId
+     * @return array
+     */
     function getMemberById($memberId){
         $query = "select * FROM " . DataSource::USERTABLE . " WHERE ID = ?";
         $paramType = "i";
         $paramArray = array($memberId);
         $memberResult = $this->ds->select($query, $paramType, $paramArray);
-        
+
         return $memberResult;
     }
-	
-	
+
+
+    /**
+     * @param $memberName
+     * @return array
+     */
     function getMemberByUNAME($memberName){
         $query = "select * FROM " . DataSource::USERTABLE . " WHERE UserName = ?";
         $paramType = "s";
         $paramArray = array($memberName);
         $memberResultByName = $this->ds->select($query, $paramType, $paramArray);
-        
+
         return $memberResultByName;
     }
 
+    /**
+     * @param $memberName
+     * @return bool
+     */
     function checkMemberExist($memberName){
         $query = "select UserName FROM " . DataSource::USERTABLE . " WHERE UserName = ?";
         $paramType = "s";
@@ -41,14 +64,22 @@ class Member
         $searchedMember = (isset($memberResultByName[0]['UserName'])) ? $memberResultByName[0]['UserName'] : false;
         return ($searchedMember !== false && $searchedMember === $memberName) ? true : false;
     }
-	
-	function getAllMember(){
+
+    /**
+     * @return array
+     */
+    function getAllMember(){
         $query = "select * FROM " . DataSource::USERTABLE;
         $AllMemberResult = $this->ds->select($query);
-        
+
         return $AllMemberResult;
     }
 
+    /**
+     * @param $username
+     * @param $password
+     * @return bool
+     */
     function registerUser($username, $password){
 
             $userSecret = rand(100000000, 999999999);
@@ -62,7 +93,12 @@ class Member
 				return true;
 			} else { return false; }
     }
-    
+
+    /**
+     * @param $username
+     * @param $password
+     * @return bool
+     */
     public function processLogin($username, $password) {
 		$queryUserPassworldHash = "select UserPassword, UserName FROM " . DataSource::USERTABLE . " WHERE UserName = ?";
 		$paramTypeForUP = "s";
@@ -71,7 +107,7 @@ class Member
 
 		$passwordHash = (isset($userPassworldHashResult[0]['UserPassword'])) ? $userPassworldHashResult[0]['UserPassword'] : "zero";
         $queryedUser = (isset($userPassworldHashResult[0]['UserName'])) ? $userPassworldHashResult[0]['UserName'] : "ThisDoesnotExist";
-				
+
 		if (password_verify($password, $passwordHash) && $username === $queryedUser) {
         $query = "select * FROM " . DataSource::USERTABLE . " WHERE UserName = ? AND UserPassword = ?";
         $paramType = "ss";
@@ -84,12 +120,12 @@ class Member
 			$_SESSION["UserToken"] = $memberResult[0]["UserToken"];
             return true;
         } else {
-               			   
+
 			return false;
 		}
           } else {
                return false;
          }
-		
+
     }
 }
