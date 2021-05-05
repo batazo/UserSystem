@@ -24,13 +24,11 @@ class Request {
 	}
 	
 	public function loginReq(){
-		return ['loginName' => $this->postLoginName,
-			    'loginPassw' => $this->postLoginPassw];
+		return ['loginName' => $this->postLoginName, 'loginPassw' => $this->postLoginPassw];
 	}
 	
 	public function registerReq(){
-		return ['regName' => $this->postRegName,
-			    'regPassw' => $this->postRegPassw];
+		return ['regName' => $this->postRegName, 'regPassw' => $this->postRegPassw];
 	}
 }
 
