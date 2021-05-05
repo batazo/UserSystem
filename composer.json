@@ -1,0 +1,29 @@
+{
+  "name": "bzozoo/user-system",
+  "description": "A simple user management project",
+  "type": "project",
+  "keywords": [
+    "user","management"
+  ],
+  "homepage": "https://github.com/bzozoo/UserSystem/",
+  "authors": [
+    {
+      "name": "Zoltan Bata",
+      "role": "owner"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/bzozoo/UserSystem/issues/"
+  },
+  "require": {
+    "php": ">=7.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "UserSystem\\": "src/"
+    }
+  },
+  "require-dev": {
+    "symfony/var-dumper": "^5.2"
+  }
+}
