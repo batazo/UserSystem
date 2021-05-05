@@ -1,5 +1,4 @@
 <?php
-
 class Request {
 	
 	public $postLoginName;
@@ -24,29 +23,19 @@ class Request {
 		}
 	}
 	
-	public function testReq() {
-		 $test = 'THIS IS THE TEST REQ';
-		return $test;
-	}
-	
 	public function loginReq(){
-		return [
-			  'loginName' => $this->postLoginName,
-			  'loginPassw' => $this->postLoginPassw
-			];
+		return ['loginName' => $this->postLoginName,
+			    'loginPassw' => $this->postLoginPassw];
 	}
 	
 	public function registerReq(){
-		return Array(
-			  'regName' => $this->postRegName,
-			  'regPassw' => $this->postRegPassw
-			);
+		return ['regName' => $this->postRegName,
+			    'regPassw' => $this->postRegPassw];
 	}
 }
 
 $request = new Request();
 $data = $request->requestHandler();
-
 
 if(isset($_SERVER["HTTP_REFERER"])){
     $restprefix = ($_SERVER['HTTPS'] == 'on') ? "https://" : "http://";
