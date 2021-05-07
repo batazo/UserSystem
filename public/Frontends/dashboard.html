@@ -1,0 +1,84 @@
+<html>
+  <head>
+  <title>USER DASBOARD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+   <link rel="stylesheet" href="dashboard.css">
+  
+  </head>
+  <body>
+
+<div id="container">
+  <div id="loginFormDiv">
+    <form id="loginForm" name="loginForm" action="">
+      <h2>LOGIN</h2>
+      <label for="nameField"><strong>Username:</strong></label></br>
+      <input type="text" id="nameField" class="conwidth" name="nameField" autocomplete="on" required>
+      <div id="errorBoxName" class="errorBox hidden"></div>
+      <p>
+        <label for="passField"><strong>Password</strong> (8 characters minimum):</label></br>
+        <input type="password" id="passField" class="conwidth" name="passField" autocomplete="on" minlength="8" required>
+      <div id="errorBoxPass" class="errorBox hidden"></div>
+      </p>
+      <p>
+
+        <input type="checkbox" id="stayloggedcheck" name="stayloggedcheck">
+        <label for="stayloggedcheck">I want to stay logged in</label>
+      </p>
+      <p>
+      <div class="buttoncontainer">
+        <div id="loginProgressBox" class="progressBox hidden">Login in progress ...<img src="https://bzozoo.github.io/UserSystem/FRONTEND/img/load.webp" width=18px /></div>
+        <input class="actionbuttons" type="button" id="submitButton" name="submitButton" value="LOGIN">
+      </div>
+      </p>
+      <div id="errorBoxCommon" class="errorBox hidden"></div>
+    </form>
+
+    <br>
+    <hr>
+
+    <form id="regForm" name="regForm" autocomplete="off" action="">
+      <h2>REGISTER</h2>
+      <label for="regNameField"><strong>Username:</strong></label></br>
+      <input type="text" id="regNameField" class="conwidth" name="regNameField" autocomplete="new-password" required>
+      <div id="errorBoxRegName" class="errorBox hidden"></div>
+
+      <p>
+        <label for="regPassField"><strong>Password</strong> (8 characters minimum):</label></br>
+        <input type="password" id="regPassField" class="conwidth" name="regPassField" autocomplete="new-password" minlength="8" required>
+      <div id="errorBoxRegPass" class="errorBox hidden"></div>
+      </p>
+
+      <p>
+        <label for="regConfirmPassField"><strong>Confirm Password</strong> (8 characters minimum):</label></br>
+        <input type="password" id="regConfirmPassField" class="conwidth" name="regConfirmPassField" autocomplete="new-password" minlength="8" required>
+      <div id="errorBoxRegConfirmPass" class="errorBox hidden"></div>
+      </p>
+
+      <p>
+      <div class="buttoncontainer">
+        <div id="regProgressBox" class="progressBox hidden">Registration in progress ...<img src="https://bzozoo.github.io/UserSystem/FRONTEND/img/load.webp" width=18px /></div>
+        <input class="actionbuttons" type="button" id="regSubmitButton" name="regSubmitButton" value="REGISER">
+        <div id="regSuccessBox" class="regSuccessBox hidden">Registration success! You can Log In! </div>
+        <div id="errorBoxReg" class="errorBox hidden"></div>
+      </div>
+      </p>
+    </form>
+  </div>
+
+  <div id="userDatasDiv" class="hidden">
+    <!-- USER NOT LOGGED IN -->
+  </div>
+</div>
+
+<!-- Mobile devtools NOW DISABLED
+<script src="//cdn.jsdelivr.net/npm/eruda"></script>
+
+<script>eruda.init();</script>
+ -->
+
+<script src="dashboard.js"></script>
+
+
+</body>
+</html>
