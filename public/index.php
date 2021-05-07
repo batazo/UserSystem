@@ -4,7 +4,7 @@ use UserSystem\Components\DataSource;
 use UserSystem\Components\Member;
 use UserSystem\Components\Score;
 
-require_once __DIR__ . "/../vendor/autoload.php";
+require_once "../private/vendor/autoload.php";
 
 $dataSource = new DataSource();
 $member = new Member();
