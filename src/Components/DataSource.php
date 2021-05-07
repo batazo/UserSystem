@@ -38,7 +38,7 @@ class DataSource extends Component
      */
     public function getConnection()
     {
-		$dbconf = parse_ini_file("../../private/db-config.ini");
+		$dbconf = parse_ini_file("../db-config.ini");
         $conn = new \mysqli($dbconf['host'], $dbconf['dbuser'], $dbconf['dbpass'], $dbconf['dbname']);
 
         if (mysqli_connect_errno()) {
