@@ -1,4 +1,5 @@
 .idea
 .env
 /src/composer.lock
+/src/db-config.ini
 /src/vendor

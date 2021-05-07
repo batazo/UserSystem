@@ -5,7 +5,7 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 Expect heavy code breaking changes.
 
 ## System Reuirements:
-* PHP 5.6 - PHP 7.4
+* PHP 7.2 or newer
 * MySQL
 * Webserver
 
