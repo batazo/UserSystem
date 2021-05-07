@@ -11,6 +11,8 @@ Expect heavy code breaking changes.
 
 ## INSTALLATION:
 * Clone or download package
+* Move the allsrc folder to a private folder
+* Move the files from public folder to your webdocroot
 * Use `composer install` to initialize the project 
 * Create a database on your hosting or own server and run SQL code from [/install/install.sql](/install/install.sql) file
 * You can create the structure in Phpmyadmin too
