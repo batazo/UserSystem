@@ -1,9 +1,11 @@
 <?php
-namespace Usersystem;
+namespace UserSystem\Components;
 
-use \Usersystem\Member;
+use UserSystem\Components\Member;
 
-require_once (__DIR__ . "/headerset.php");
+require_once "../private/vendor/autoload.php";
+
+//require_once (__DIR__ . "/headerset.php");
 
 
 if(isset($_POST['nameField']) && isset($_POST['passField'])){
@@ -13,7 +15,7 @@ if(isset($_POST['nameField']) && isset($_POST['passField'])){
 	$username = filter_var($_POST["nameField"], FILTER_SANITIZE_STRING);	
     $password = filter_var($_POST["passField"], FILTER_SANITIZE_STRING);
 	
-    require_once (__DIR__ . "/class/Member.php");
+    //require_once (__DIR__ . "/class/Member.php");
 	
 	$member = new Member();
     $isLoggedIn = $member->processLogin($username, $password);
