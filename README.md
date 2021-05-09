@@ -26,7 +26,7 @@ Expect heavy code breaking changes.
 
 ## API USAGE (BACKEND)
 ##### CALL FOR LOGIN #####
-<ins>Endpoint:</ins> [BACKEND/login.php](BACKEND/login.php) .
+<ins>Endpoint:</ins> [YourDomain/api/login](src/Views/login.php) .
 - Login endpoint waits `$_POST['nameField']` and `$_POST['passField']` datas in `POST` method
 - If Username and Password is not found in database , the login endpoint will return with this JSON object:
   ``` 
@@ -39,7 +39,7 @@ Expect heavy code breaking changes.
   Where `session_id()` is session of logged-in user, `$_SESSION['UserID']` ID of logged-in user, `$_SESSION['UserName']` Name of logged-in user, `$memberProfile[0]['UserRegTime']` is registration date and time of logged-in user, `$memberProfile[0]['UserSecret']` is Secret token of logged-in user, `$memberProfile[0]['UserToken']` is a general token of logged-in user
 
 ##### CALL FOR USER REGISTRATION #####
-<ins>Endpoint:</ins> [BACKEND/register.php](BACKEND/register.php)
+<ins>Endpoint:</ins> [YourDomain/api/register](src/Views/register.php)
 - Register endpoint waits `$_POST["reguser"]` and `$_POST["regpwd"]` datas in `POST` method
 - If User exists, the registration will be failed and the regitration endpoint will return with this JSON object:
   ```
@@ -56,22 +56,24 @@ Expect heavy code breaking changes.
   In this case, the registration will be complete.
  
  ##### CALL FOR MEMBER DATAS #####
- <ins>Endpoint:</ins> [BACKEND/member.php?profile](BACKEND/member.php)
+ <ins>Endpoint:</ins> [YourDomain/api/userprofile](src/Views/member.php)
  - Member endpoint waits `$_POST['sessid']` data from frontend
  - If this session does not exist in the server, the member endpoint will return with this JSON object:
    ```
      { 'UserName' : 'Failed', 'User' : 'DoesnotExist' }
    ```
  -  If this session does not exist in the server, the member endpoint will return same datas as the login endpoint.
-  <ins>Endpoint:</ins> [BACKEND/member.php?profile-local](BACKEND/member.php)
+  <ins>Endpoint:</ins> [YourDomain/api/profile](src/Views/member.php)
   - If the frontend are on same server if the frontend is on the same server as the backend, this endpoint will use the PHPSESSION cookie datas and it will return same data as login endpoint
 
-<ins>Endpoint:</ins> [BACKEND/member.php?memberCheck](BACKEND/member.php)
-- This endpoint waits `$_POST['checkeMember']` data in `POST` method and it will return with simple YES or NO in text format, depending on user exists or does not exist
+<ins>Endpoint:</ins> [YourDomain/api/membercheck/SEARCHED-MEMBERNAME](src/Views/member.php)
+- This endpoint waits `SEARCHED-MEMBERNAME` data from URL in `POST` method and it will return with simple YES or NO in text format, depending on user exists or does not exist
 
 ##### CALL FOR USER SCORES #####
-<ins>Endpoint:</ins> [BACKEND/userscore.php?userName=USERNAME][BACKEND/userscore.php] (where USERNAME is the name of the user whose score information I want to retrieve )
-- This endpoint waits `$_GET["userName"]` datas in `GET` method and it will return with `{ 'UserName' : 'USERNAME', 'UserScore' : 'USERSCORE'}` object if user exists and with `{"UserName": "UserName does not exist", "UserScore":"UserScore does not exist"}` object if user does not exist
+<ins>Endpoint:</ins> [YourDomain/api/userscore/SEARCHED-USERNAME][src/Views/userscore.php] (where SEARCHED-USERNAME is the name of the user whose score information I want to retrieve )
+- This endpoint waits `SEARCHED-USERNAME` data in `GET` method from URL and it will return with `{ 'UserName' : 'USERNAME', 'UserScore' : 'USERSCORE'}` object if user exists and with `{"UserName": "UserName does not exist", "UserScore":"UserScore does not exist"}` object if user does not exist
+<ins>Endpoint:</ins> [YourDomain/api/userscore][src/Views/userscore.php]
+- This endpoint don't wait datas. It will return automaticaly with all username data and their scores
 
 ## JavaScript/FetchAPI USAGE (FRONTEND)
 ##### SEND DATA FOR LOGIN #####

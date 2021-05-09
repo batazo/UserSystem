@@ -85,10 +85,11 @@ class Member extends Component
             $userSecret = rand(100000000, 999999999);
             $userToken = rand(100000000, 999999999);
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+			$userIP = (isset($_SERVER['REMOTE_ADDR'])) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0';
 
-            $query = "INSERT INTO " . DataSource::USERTABLE . " (UserName, UserPassword, UserSecret, UserToken) VALUES (?, ?, ?, ?)";
-            $paramType = "ssii";
-            $paramArray = Array($username, $hashed_password, $userSecret, $userToken);
+            $query = "INSERT INTO " . DataSource::USERTABLE . " (UserName, UserPassword, UserIP, UserSecret, UserToken) VALUES (?, ?, ?, ?, ?)";
+            $paramType = "sssii";
+            $paramArray = Array($username, $hashed_password, $userIP,$userSecret, $userToken);
             if($this->ds->insert($query, $paramType, $paramArray)){
 				return true;
 			} else { return false; }

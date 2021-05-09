@@ -1,11 +1,11 @@
 <?php
-namespace Usersystem;
+namespace UserSystem\Components;
 
-use \Usersystem\Member;
+use UserSystem\Components\Member;
 
-require_once (__DIR__ . "/headerset.php");
+require_once "../private/vendor/autoload.php";
 
-require_once (__DIR__ . "/class/Member.php");
+//require_once (__DIR__ . "/headerset.php");
 
 if(isset($_POST["reguser"]) && isset($_POST["regpwd"])){
     $regUser = trim($_POST["reguser"]);

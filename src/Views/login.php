@@ -19,9 +19,7 @@ if(isset($_POST['nameField']) && isset($_POST['passField'])){
 	
 	$member = new Member();
     $isLoggedIn = $member->processLogin($username, $password);
-	
-    header("Content-Type: application/json");
-	
+
 	 if (! $isLoggedIn) {
 		 
 		 /* $data = Array(
@@ -40,6 +38,7 @@ if(isset($_POST['nameField']) && isset($_POST['passField'])){
 		$data = '{"Login": "Success", "SessionId":"'. session_id() .'" ,"UserID":"'. $_SESSION['UserID'] .'","UserName":"'. $_SESSION['UserName'] .'", "UserRegistredAt":"'. $memberProfile[0]['UserRegTime'] .'", "UserSecret":"'. $memberProfile[0]['UserSecret'] .'", "UserToken":"'. $memberProfile[0]['UserToken'] .'"}';
 	}
 	
+	header("Content-Type: application/json");
 	$data = json_encode(json_decode($data), JSON_PRETTY_PRINT);
 	echo $data;
 

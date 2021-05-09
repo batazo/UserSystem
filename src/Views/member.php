@@ -1,24 +1,22 @@
 <?php
-namespace Usersystem;
+namespace UserSystem\Components;
 
-use \Usersystem\Member;
+use UserSystem\Components\Member;
 
-require_once (__DIR__ . "/headerset.php");
+require_once "../private/vendor/autoload.php";
 
-require_once (__DIR__ . "/class/Member.php");
-
-if(isset($_GET['memberCheck'])){
-    if($_POST['checkeMember']){
+if(isset($member_name)){
+    if($member_name){
             $member = new Member();
-            $memberName = trim($_POST['checkeMember']);
+            $memberName = trim($member_name);
             $checkMember = $member->checkMemberExist($memberName);
 			$checkMember = ($checkMember) ? "YES": "NO";
         echo $checkMember;
     }
 }
 
-
-if(isset($_GET['profile'])){
+if(isset($getUserProfile)){
+if($getUserProfile){
      if(isset($_POST['sessid'])){
 
         session_id($_POST['sessid']);
@@ -50,8 +48,10 @@ if(isset($_GET['profile'])){
 
     }
 }
+}
 
-if(isset($_GET['profile-local'])){
+if(isset($getUserProfileLocal)){
+if($getUserProfileLocal){
 
         session_start();
 
@@ -79,4 +79,5 @@ if(isset($_GET['profile-local'])){
            echo json_encode($data, JSON_PRETTY_PRINT);
        }
 
+}
 }
