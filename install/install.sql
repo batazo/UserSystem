@@ -7,6 +7,7 @@ CREATE TABLE `Users` (
   `UserName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `UserPassword` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `UserRegTime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'User registration date',
+  `UserIP` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `UserSecret` int(8) NOT NULL,
   `UserToken` int(8) NOT NULL,
   `UserAdminRole` int(1) DEFAULT NULL,
@@ -15,8 +16,8 @@ CREATE TABLE `Users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-INSERT INTO `Users` (`ID`, `UserName`, `UserPassword`, `UserRegTime`, `UserSecret`, `UserToken`, `UserAdminRole`, `UserScore`, `UserSpeed`) VALUES
-(100, 'Admin', 'YourHashedPassword', '1970-01-01 12:00:00', 00000000, 00000000, 1, 0, NULL);
+INSERT INTO `Users` (`ID`, `UserName`, `UserPassword`, `UserRegTime`, `UserIP`, `UserSecret`, `UserToken`, `UserAdminRole`, `UserScore`, `UserSpeed`) VALUES
+(100, 'Admin', 'YourHashedPassword', '1970-01-01 12:00:00', NULL, 00000000, 00000000, 1, 0, NULL);
 
 ALTER TABLE `Users`
   ADD PRIMARY KEY (`ID`);
