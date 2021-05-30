@@ -1,10 +1,6 @@
 <?php
 namespace UserSystem\Components;
 
-use UserSystem\Components\Member;
-
-require_once "../private/vendor/autoload.php";
-
 //require_once (__DIR__ . "/headerset.php");
 
 if(isset($_POST["reguser"]) && isset($_POST["regpwd"])){
@@ -29,5 +25,3 @@ if(isset($_POST["reguser"]) && isset($_POST["regpwd"])){
 
     echo json_encode($data, JSON_PRETTY_PRINT);
 }
-    
-

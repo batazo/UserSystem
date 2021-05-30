@@ -1,9 +1,5 @@
 <?php
 
-use UserSystem\Components\DataSource;
-use UserSystem\Components\Member;
-use UserSystem\Components\Score;
-
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -15,18 +11,8 @@ use Slim\Routing\RouteContext;
 
 require_once "../private/vendor/autoload.php";
 
-$dataSource = new DataSource();
-$member = new Member();
-$score = new Score();
-
-//dump($dataSource);
-//dump($member);
-//dump($score);
-
 // Instantiate App
 $app = AppFactory::create();
-
-
 
 // This middleware will append the response header Access-Control-Allow-Methods with all allowed methods
 $app->add(function (Request $request, RequestHandlerInterface $handler): Response {
@@ -63,14 +49,13 @@ $app->get('/', function (Request $request, Response $response) {
     return $response;
 });
 
-//Test ROUTE
-$app->post('/api/posttest', function (Request $request, Response $response) : Response {
-    $postparam = $request->getParsedBody();
-	echo $postparam['test'];
-	$response->getBody()->write('POSTTEST PATH');
-    
-	return $response;
+//Endpoints table of contents
+$app->get('/api/', function (Request $request, Response $response, $args) {
+    $renderer = new PhpRenderer('../private/src/Views');
+    return $renderer->render($response, "api.php", $args);
 });
+//Redirect API to API/
+$app->redirect('/api', '/api/', 301);
 
 //User score searcher route
 $app->get('/api/userscore/{searchname}', function (Request $request, Response $response, $args) {
@@ -88,6 +73,8 @@ $app->get('/api/userscore', function (Request $request, Response $response, $arg
     $renderer = new PhpRenderer('../private/src/Views');
     return $renderer->render($response, "userscore.php", $args);
 });
+//Redirect /api/userscore/ to /api/userscore
+$app->redirect('/api/userscore/', '/api/userscore', 301);
 
 //Member exist check route
 $app->get('/api/membercheck/{name}', function (Request $request, Response $response, $args) {
@@ -100,7 +87,7 @@ $app->get('/api/membercheck/{name}', function (Request $request, Response $respo
     return $renderer->render($response, "member.php", $args);
 });
 
-//User profile JSON DATAs
+//User profile JSON DATAs ( by sessionid )
 $app->post('/api/userprofile', function (Request $request, Response $response, $args) {
 	$templateVariables = [
       "getUserProfile" => true
@@ -108,6 +95,18 @@ $app->post('/api/userprofile', function (Request $request, Response $response, $
     $renderer = new PhpRenderer('../private/src/Views', $templateVariables);
     return $renderer->render($response, "member.php", $args);
 });
+
+//User profile JSON DATAs ( by JWT )
+$app->post('/api/user', function (Request $request, Response $response, $args) {
+	$templateVariables = [
+      "getUserDatas" => true
+    ];
+    $renderer = new PhpRenderer('../private/src/Views', $templateVariables);
+    return $renderer->render($response, "member.php", $args);
+});
+
+//Redirect /api/user/ to /api/user
+$app->redirect('/api/user/', '/api/user', 301);
 
 //User profile JSONdata in same domain, if backeds and frontend are on same domain and PHPSESSID cookie is exist
 $app->get('/api/profile', function (Request $request, Response $response, $args) {
@@ -128,6 +127,23 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
 $app->post('/api/register', function (Request $request, Response $response, $args) {
     $renderer = new PhpRenderer('../private/src/Views');
     return $renderer->render($response, "register.php", $args);
+});
+
+
+//Test ROUTES
+//Posttest
+$app->post('/api/posttest', function (Request $request, Response $response) : Response {
+    $postparam = $request->getParsedBody();
+	echo $postparam['test'];
+	$response->getBody()->write('POSTTEST PATH');
+    
+	return $response;
+});
+
+//JWT token and server token test
+$app->get('/api/servertokentest', function (Request $request, Response $response, $args) {
+    $renderer = new PhpRenderer('../private/test');
+    return $renderer->render($response, "token.php", $args);
 });
 
 // The RoutingMiddleware should be added after our CORS middleware so routing is performed first

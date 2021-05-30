@@ -1,7 +1,6 @@
 <?php
 
 namespace UserSystem\Components;
-
 use UserSystem\Component;
 
 /**

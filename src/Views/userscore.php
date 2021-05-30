@@ -1,10 +1,5 @@
 <?php
-namespace Usersystem\Components;
-
-use \Usersystem\Components\Score;
-
-require_once "../private/vendor/autoload.php";
-//require_once (__DIR__ . "/headerset.php");
+namespace UserSystem\Components;
 
 //Get Score By UserName
 if(isset($nameForScore) && isset($ScoreByNameSwitcher)){

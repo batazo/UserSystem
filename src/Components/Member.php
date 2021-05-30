@@ -1,5 +1,4 @@
 <?php
-
 namespace UserSystem\Components;
 
 use UserSystem\Component;
@@ -115,6 +114,7 @@ class Member extends Component
         $paramArray = array($username, $passwordHash);
         $memberResult = $this->ds->select($query, $paramType, $paramArray);
         if(!empty($memberResult)) {
+            //Session Create
 			$_SESSION["UserID"] = $memberResult[0]["ID"];
 			$_SESSION["UserName"] = $memberResult[0]["UserName"];
 			$_SESSION["UserSecret"] = $memberResult[0]["UserSecret"];
