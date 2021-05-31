@@ -43,61 +43,14 @@ if($getUserProfile){
             'UserName' => 'Failed',
             'User' => 'DoesnotExist'
          );
-           echo json_encode($data, JSON_PRETTY_PRINT);
+            header('HTTP/1.0 401 Unauthorized');
+            echo json_encode($data, JSON_PRETTY_PRINT);
        }
 
     }
 }
 }
 
-//USER PROFILE BY JWT TOKEN
-//$getUserDatas variable form router APP!
-if(isset($getUserDatas)){
-    if($getUserDatas){
-         if(isset($_POST['jwtKEY'])){
-            
-            $data = Array(
-                'UserName' => 'Failed',
-                'User' => 'DoesnotExist'
-             );
-
-            $JWTokenInstance = new JWToken();
-            
-            $tokenUserDatas = $JWTokenInstance->decodeToken($_POST['jwtKEY']);
-            if($tokenUserDatas){
-                if($tokenUserDatas->iss === 'UserSystem'){
-                    
-                    $now = new \DateTimeImmutable();
-                    $memberInstance = new Member();
-                    
-                    $memberProfile = $memberInstance->getMemberByUNAME($tokenUserDatas->userName);
-
-                    if($memberProfile){
-                        if($memberProfile[0]['UserName'] === $tokenUserDatas->userName && $memberProfile[0]['ID'] === $tokenUserDatas->userId && $memberProfile[0]['UserSecret'] === $tokenUserDatas->userSecret){
-                            $data = Array(
-                                'ActualTimestamp' => $now->getTimestamp(),
-			                    'ExpTimeStamp' => $tokenUserDatas->exp,
-                                'UserRegistredAt' => $memberProfile[0]["UserRegTime"],
-                                'UserName' => $memberProfile[0]['UserName'],
-                                'UserAvatar' => $memberProfile[0]['UserAvatar'],
-                                'UserScore' => $memberProfile[0]['UserScore'],
-                                'UserSpeed' => $memberProfile[0]['UserSpeed'],
-                                'User' => 'Exist'
-                            );
-                            
-                        }
-                        
-                    }
-                    
-                }
-            }
-            
-            header("Content-Type: application/json");
-            echo json_encode($data, JSON_PRETTY_PRINT);
-            
-         }
-    }
-}
 
 
 //USERPROFILE LOCAL

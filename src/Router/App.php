@@ -97,12 +97,14 @@ $app->post('/api/userprofile', function (Request $request, Response $response, $
 });
 
 //User profile JSON DATAs ( by JWT )
-$app->post('/api/user', function (Request $request, Response $response, $args) {
-	$templateVariables = [
-      "getUserDatas" => true
-    ];
+$app->map(['GET', 'POST'], '/api/user', function (Request $request, Response $response, $args) {
+
+    require_once '../private/src/Controllers/userprofileJWTController.php';
+    
     $renderer = new PhpRenderer('../private/src/Views', $templateVariables);
-    return $renderer->render($response, "member.php", $args);
+    return $renderer->render(
+            $response->withStatus($responseHeaderSet), "memberView.php", $args
+                    );
 });
 
 //Redirect /api/user/ to /api/user
@@ -144,6 +146,16 @@ $app->post('/api/posttest', function (Request $request, Response $response) : Re
 $app->get('/api/servertokentest', function (Request $request, Response $response, $args) {
     $renderer = new PhpRenderer('../private/test');
     return $renderer->render($response, "token.php", $args);
+});
+
+//Statuscodes PHP header testrs
+$app->get('/api/statuscodes', function (Request $request, Response $response, $args) {
+
+require_once '../private/src/Controllers/statuscodesController.php';
+    
+$renderer = new PhpRenderer('../private/test', $templateVariables);
+
+return $renderer->render($response->withStatus($responseHeaderSet), "statuscodes.php", $args);
 });
 
 // The RoutingMiddleware should be added after our CORS middleware so routing is performed first
