@@ -2,8 +2,8 @@
 User Dasboard. User handler system with JSON api (PHP based backend) and Fetch API (Javascript based frontend)
 
 ## This project is currently under development.
-Expect heavy code breaking changes.
-Version: 0.41-dev
+- Expect heavy code breaking changes.
+- Version: 0.42-dev
 
 ## Frontend demos
 - [Github.io DEMO](https://bzozoo.github.io/UserSystem/public/Frontends/dashboard.html)

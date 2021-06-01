@@ -4,17 +4,27 @@ use UserSystem\Components\JWToken;
 
 header("Content-Type: application/json");
 $responseHeaderSet = 401;
-
+$JWTKey = false;
 $data = Array(
     'UserName' => 'Failed',
     'User' => 'DoesnotExist'
  );
 
+$headers = getallheaders();
+
+if(isset($headers['Authorization'])){
+$JWTKey = filter_var(substr($headers['Authorization'], 7), FILTER_SANITIZE_STRING);
+}
+
 if(isset($_POST['jwtKEY'])){
+    $JWTKey = filter_var($_POST['jwtKEY'], FILTER_SANITIZE_STRING);
+}
+
+if($JWTKey){
 
     $JWTokenInstance = new JWToken();
     
-    $tokenUserDatas = $JWTokenInstance->decodeToken($_POST['jwtKEY']);
+    $tokenUserDatas = $JWTokenInstance->decodeToken($JWTKey);
     if($tokenUserDatas){
         if($tokenUserDatas->iss === 'UserSystem'){
             

@@ -78,22 +78,27 @@ $app->redirect('/api/userscore/', '/api/userscore', 301);
 
 //Member exist check route
 $app->get('/api/membercheck/{name}', function (Request $request, Response $response, $args) {
-	$searched_name = $args['name'];
-	$templateVariables = [
-      "member_name" => $searched_name
-    ];
-	
+	$searched_name = ($args['name']) ? $args['name'] : 'ZERO';
+    require_once '../private/src/Controllers/memberCheckController.php';
     $renderer = new PhpRenderer('../private/src/Views',  $templateVariables);
-    return $renderer->render($response, "member.php", $args);
+    return $renderer->render($response, "textView.php", $args);
 });
+$app->get('/api/membercheck/', function (Request $request, Response $response, $args) {
+	
+    $templateVariables = ["data" => 'Name is empty'];
+
+    $renderer = new PhpRenderer('../private/src/Views',  $templateVariables);
+    return $renderer->render($response, "textView.php", $args);
+});
+$app->redirect('/api/membercheck', '/api/membercheck/', 301);
 
 //User profile JSON DATAs ( by sessionid )
-$app->post('/api/userprofile', function (Request $request, Response $response, $args) {
-	$templateVariables = [
-      "getUserProfile" => true
-    ];
+$app->map(['GET', 'POST'], '/api/userprofile', function (Request $request, Response $response, $args) {
+
+    require_once '../private/src/Controllers/userprofileSessionController.php';
+
     $renderer = new PhpRenderer('../private/src/Views', $templateVariables);
-    return $renderer->render($response, "member.php", $args);
+    return $renderer->render($response->withStatus($responseHeaderSet), "jsonView.php", $args);
 });
 
 //User profile JSON DATAs ( by JWT )
@@ -102,33 +107,32 @@ $app->map(['GET', 'POST'], '/api/user', function (Request $request, Response $re
     require_once '../private/src/Controllers/userprofileJWTController.php';
     
     $renderer = new PhpRenderer('../private/src/Views', $templateVariables);
-    return $renderer->render(
-            $response->withStatus($responseHeaderSet), "memberView.php", $args
-                    );
+    return $renderer->render($response->withStatus($responseHeaderSet), "jsonView.php", $args);
 });
 
 //Redirect /api/user/ to /api/user
 $app->redirect('/api/user/', '/api/user', 301);
 
-//User profile JSONdata in same domain, if backeds and frontend are on same domain and PHPSESSID cookie is exist
+//User profile LOCAL JSONdata in same domain, if backeds and frontend are on same domain and PHPSESSID cookie is exist
 $app->get('/api/profile', function (Request $request, Response $response, $args) {
-	$templateVariables = [
-      "getUserProfileLocal" => true
-    ];
+    require_once '../private/src/Controllers/userprofileLocalController.php';
     $renderer = new PhpRenderer('../private/src/Views', $templateVariables);
-    return $renderer->render($response, "member.php", $args);
+    return $renderer->render($response->withStatus($responseHeaderSet), "jsonView.php", $args);
 });
 
 //Login endpoint route
 $app->post('/api/login', function (Request $request, Response $response, $args) {
-    $renderer = new PhpRenderer('../private/src/Views');
-    return $renderer->render($response, "login.php", $args);
+    require_once '../private/src/Controllers/loginController.php';
+    $renderer = new PhpRenderer('../private/src/Views', $templateVariables);
+    return $renderer->render($response->withStatus($responseHeaderSet), "jsonView.php", $args);
 });
+$app->redirect('/api/login/', '/api/login', 301);
 
 //Register endpoint route
 $app->post('/api/register', function (Request $request, Response $response, $args) {
-    $renderer = new PhpRenderer('../private/src/Views');
-    return $renderer->render($response, "register.php", $args);
+    require_once '../private/src/Controllers/registerController.php';
+    $renderer = new PhpRenderer('../private/src/Views', $templateVariables);
+    return $renderer->render($response->withStatus($responseHeaderSet), "jsonView.php", $args);
 });
 
 
