@@ -3,7 +3,7 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 
 ## This project is currently under development.
 - Expect heavy code breaking changes.
-- Version: 0.42-dev
+- Version: 0.43-dev
 
 ## Frontend demos
 - [Github.io DEMO](https://bzozoo.github.io/UserSystem/public/Frontends/dashboard.html)
@@ -48,36 +48,36 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 - Register endpoint waits `$_POST["reguser"]` and `$_POST["regpwd"]` datas in `POST` method
 - If User exists, the registration will be failed and the regitration endpoint will return with this JSON object:
   ```
-  {'UserExist' : "YES", 'Registration' : "Failed"}
+  {'UserExisted' : "YES", 'Registration' : "Failed"}
   ```
 - If User does not exist in system but there are an other error, the register endpoint will return with this JSON object:
   ```
-  {'UserExist' : "NO", 'Registration' : "Failed"}
+  {'UserExisted' : "NO", 'Registration' : "Failed"}
   ```
 - If User does not exist and there are not an other error, the register endpoint will return with this JSON object:
   ```
-  {'UserExist' : "NO", 'Registration' : "Success"}
+  {'UserExisted' : "NO", 'Registration' : "Success"}
   ```
   In this case, the registration will be complete.
  
  ##### CALL FOR MEMBER DATAS #####
- <ins>Endpoint:</ins> [YourDomain/api/userprofile](src/Views/member.php)
+ <ins>Endpoint:</ins> [YourDomain/api/userprofile]
  - Member endpoint waits `$_POST['sessid']` data from frontend
  - If this session does not exist in the server, the member endpoint will return with this JSON object:
    ```
      { 'UserName' : 'Failed', 'User' : 'DoesnotExist' }
    ```
  -  If this session does not exist in the server, the member endpoint will return same datas as the login endpoint.
-  <ins>Endpoint:</ins> [YourDomain/api/profile](src/Views/member.php)
+  <ins>Endpoint:</ins> [YourDomain/api/profile]
   - If the frontend are on same server if the frontend is on the same server as the backend, this endpoint will use the PHPSESSION cookie datas and it will return same data as login endpoint
 
-<ins>Endpoint:</ins> [YourDomain/api/membercheck/SEARCHED-MEMBERNAME](src/Views/member.php)
+<ins>Endpoint:</ins> [YourDomain/api/membercheck/SEARCHED-MEMBERNAME]
 - This endpoint waits `SEARCHED-MEMBERNAME` data from URL in `POST` method and it will return with simple YES or NO in text format, depending on user exists or does not exist
 
 ##### CALL FOR USER SCORES #####
-<ins>Endpoint:</ins> [YourDomain/api/userscore/SEARCHED-USERNAME][src/Views/userscore.php] (where SEARCHED-USERNAME is the name of the user whose score information I want to retrieve )
+<ins>Endpoint:</ins> [YourDomain/api/userscore/SEARCHED-USERNAME] (where SEARCHED-USERNAME is the name of the user whose score information I want to retrieve )
 - This endpoint waits `SEARCHED-USERNAME` data in `GET` method from URL and it will return with `{ 'UserName' : 'USERNAME', 'UserScore' : 'USERSCORE'}` object if user exists and with `{"UserName": "UserName does not exist", "UserScore":"UserScore does not exist"}` object if user does not exist
-<ins>Endpoint:</ins> [YourDomain/api/userscore][src/Views/userscore.php]
+<ins>Endpoint:</ins> [YourDomain/api/userscore]
 - This endpoint don't wait datas. It will return automaticaly with all username data and their scores
 
 ## JavaScript/FetchAPI USAGE (FRONTEND)
@@ -92,7 +92,7 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
     
    	let loginFetchOptions = {method: "POST", credentials: "include", mode: "cors", body: formData};
     
-    let loginEndpoint = 'YOURSERVERPATH/BACKEND/login.php'
+    let loginEndpoint = 'YOURSERVERPATH/api/login'
     
     fetch(loginEndpoint, loginFetchOptions)
 			.then((response) => {
@@ -124,7 +124,6 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
     
 ```
 
-
 ##### SEND DATA FOR REGISTRATION #####
 ```
   let regNameFieldValue = 'NAME OF USER, WE WATNT TO REGISTER'
@@ -136,7 +135,7 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
   
   let regFetchOptions = {method: "POST", credentials: "include", mode: "cors", body: formData};
   
-  const regEndpoint = "YOURSERVERPATH/BACKEND/register.php";
+  const regEndpoint = "YOURSERVERPATH/api/register";
   
   fetch(regEndpoint, regFetchOptions)
 			.then((response) => {
@@ -176,7 +175,7 @@ async function sendRequestForActualUserProfile(session) {
 	sessionData.append("sessid", session);
 
 	let fetchOptions = {method: "POST", body: sessionData,	credentials: "include",	mode: "cors", cache: "no-cache"};
-        let memberEndpoint = "YOURSERVERPATH/BACKEND/member.php?profile"
+        let memberEndpoint = "YOURSERVERPATH/api/userprofile"
 	
 	let responsedjson = false;
 	try {
@@ -204,7 +203,7 @@ let actualUserProfileDatas = await getLoggedInUserProfile(sessionFromCookie)
 async function getUserScoreEndpoint(user) {
 	let userScoreFetchOptions = {method: "GET", cache: "no-cache", mode: "cors"};
         
-	let userScoreEndpoint = 'YOURSERVERPATH/BACKEND/userscore.php?userName='
+	let userScoreEndpoint = 'YOURSERVERPATH/BACKEND/userscore/'
 	let responsedjson = false;
 	try {
 		const response = await fetch(userScoreEndpoint + user, userScoreFetchOptions);

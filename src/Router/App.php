@@ -59,19 +59,17 @@ $app->redirect('/api', '/api/', 301);
 
 //User score searcher route
 $app->get('/api/userscore/{searchname}', function (Request $request, Response $response, $args) {
-	$scorename = (!isset($args['searchname'])) ? 'Zero' : $args['searchname'];
-	$templateVar = [
-		"ScoreByNameSwitcher" => true,
-		"nameForScore" => $scorename
-    ];
-    $renderer = new PhpRenderer('../private/src/Views', $templateVar);
-    return $renderer->render($response, "userscore.php", $args);
+	$searchedScoreName = (!isset($args['searchname'])) ? 'Zero' : $args['searchname'];
+	require_once '../private/src/Controllers/getUserScoreByName.php';
+    $renderer = new PhpRenderer('../private/src/Views', $templateVariables);
+    return $renderer->render($response, "jsonView.php", $args);
 });
 
-//All user score from system
+//All UserScore from system
 $app->get('/api/userscore', function (Request $request, Response $response, $args) {
-    $renderer = new PhpRenderer('../private/src/Views');
-    return $renderer->render($response, "userscore.php", $args);
+    require_once '../private/src/Controllers/getAllUserScores.php';
+    $renderer = new PhpRenderer('../private/src/Views', $templateVariables);
+    return $renderer->render($response, "jsonView.php", $args);
 });
 //Redirect /api/userscore/ to /api/userscore
 $app->redirect('/api/userscore/', '/api/userscore', 301);
@@ -84,9 +82,7 @@ $app->get('/api/membercheck/{name}', function (Request $request, Response $respo
     return $renderer->render($response, "textView.php", $args);
 });
 $app->get('/api/membercheck/', function (Request $request, Response $response, $args) {
-	
-    $templateVariables = ["data" => 'Name is empty'];
-
+	$templateVariables = ["data" => 'Name is empty'];
     $renderer = new PhpRenderer('../private/src/Views',  $templateVariables);
     return $renderer->render($response, "textView.php", $args);
 });
@@ -138,7 +134,7 @@ $app->post('/api/register', function (Request $request, Response $response, $arg
 
 //Test ROUTES
 //Posttest
-$app->post('/api/posttest', function (Request $request, Response $response) : Response {
+$app->post('/tests/posttest', function (Request $request, Response $response) : Response {
     $postparam = $request->getParsedBody();
 	echo $postparam['test'];
 	$response->getBody()->write('POSTTEST PATH');
@@ -147,19 +143,22 @@ $app->post('/api/posttest', function (Request $request, Response $response) : Re
 });
 
 //JWT token and server token test
-$app->get('/api/servertokentest', function (Request $request, Response $response, $args) {
+$app->get('/tests/servertokentest', function (Request $request, Response $response, $args) {
     $renderer = new PhpRenderer('../private/test');
     return $renderer->render($response, "token.php", $args);
 });
 
 //Statuscodes PHP header testrs
-$app->get('/api/statuscodes', function (Request $request, Response $response, $args) {
-
+$app->get('/tests/statuscodes', function (Request $request, Response $response, $args) {
 require_once '../private/src/Controllers/statuscodesController.php';
-    
 $renderer = new PhpRenderer('../private/test', $templateVariables);
-
 return $renderer->render($response->withStatus($responseHeaderSet), "statuscodes.php", $args);
+});
+
+//JWT token and server token test
+$app->get('/tests/dumper', function (Request $request, Response $response, $args) {
+    $renderer = new PhpRenderer('../private/test');
+    return $renderer->render($response, "vardumper.php", $args);
 });
 
 // The RoutingMiddleware should be added after our CORS middleware so routing is performed first
