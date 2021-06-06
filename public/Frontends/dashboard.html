@@ -1,74 +1,154 @@
 <html>
   <head>
-  <title>USER DASBOARD</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  
-   <link rel="stylesheet" href="dashboard.css">
-  
-  </head>
+	<title>USER DASBOARD</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="dashboard.css">
+	</head>
   <body>
-
 <div id="container">
-  <div id="loginFormDiv">
-    <form id="loginForm" name="loginForm" action="">
-      <h2>LOGIN</h2>
-      <label for="nameField"><strong>Username:</strong></label></br>
-      <input type="text" id="nameField" class="conwidth" name="nameField" autocomplete="on" required>
-      <div id="errorBoxName" class="errorBox hidden"></div>
-      <p>
-        <label for="passField"><strong>Password</strong> (8 characters minimum):</label></br>
-        <input type="password" id="passField" class="conwidth" name="passField" autocomplete="on" minlength="8" required>
-      <div id="errorBoxPass" class="errorBox hidden"></div>
-      </p>
-      <p>
+	<div id="loadingContainer">
+		<svg xmlns="http://www.w3.org/2000/svg" width="300" viewBox="0 0 300 300" enable-background="new 0 0 300 300" class="dfm-load">
+  <style type="text/css">
+    <![CDATA[
+    svg.dfm-load .c1,
+    svg.dfm-load .c2,
+    svg.dfm-load .c3 {
+      -webkit-animation: dfmload 1s infinite ease;
+      animation: dfmload 1s infinite ease;
+      -webkit-transform-origin: center;
+      transform-origin: center;
+    }
 
-        <input type="checkbox" id="stayloggedcheck" name="stayloggedcheck">
-        <label for="stayloggedcheck">I want to stay logged in</label>
-      </p>
-      <p>
-      <div class="buttoncontainer">
-        <div id="loginProgressBox" class="progressBox hidden">Login in progress ...<img src="https://bzozoo.github.io/UserSystem/public/Frontends/img/load.webp" width=18px /></div>
-        <input class="actionbuttons" type="button" id="submitButton" name="submitButton" value="LOGIN">
-      </div>
-      </p>
-      <div id="errorBoxCommon" class="errorBox hidden"></div>
-    </form>
+    svg.dfm-load .c2 {
+      -webkit-animation-delay: .2s;
+      animation-delay: .2s;
+    }
 
-    <br>
-    <hr>
+    svg.dfm-load .c3 {
+      -webkit-animation-delay: .4s;
+      animation-delay: .4s;
+    }
 
-    <form id="regForm" name="regForm" autocomplete="off" action="">
-      <h2>REGISTER</h2>
-      <label for="regNameField"><strong>Username:</strong></label></br>
-      <input type="text" id="regNameField" class="conwidth" name="regNameField" autocomplete="new-password" required>
-      <div id="errorBoxRegName" class="errorBox hidden"></div>
+    @-webkit-keyframes dfmload {
+      0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
 
-      <p>
-        <label for="regPassField"><strong>Password</strong> (8 characters minimum):</label></br>
-        <input type="password" id="regPassField" class="conwidth" name="regPassField" autocomplete="new-password" minlength="8" required>
-      <div id="errorBoxRegPass" class="errorBox hidden"></div>
-      </p>
+      10% {
+        opacity: .25;
+      }
 
-      <p>
-        <label for="regConfirmPassField"><strong>Confirm Password</strong> (8 characters minimum):</label></br>
-        <input type="password" id="regConfirmPassField" class="conwidth" name="regConfirmPassField" autocomplete="new-password" minlength="8" required>
-      <div id="errorBoxRegConfirmPass" class="errorBox hidden"></div>
-      </p>
+      50% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+        opacity: 1;
+      }
 
-      <p>
-      <div class="buttoncontainer">
-        <div id="regProgressBox" class="progressBox hidden">Registration in progress ...<img src="https://bzozoo.github.io/UserSystem/public/Frontends/img/load.webp" width=18px /></div>
-        <input class="actionbuttons" type="button" id="regSubmitButton" name="regSubmitButton" value="REGISTER">
-        <div id="regSuccessBox" class="regSuccessBox hidden">Registration success! You can Log In! </div>
-        <div id="errorBoxReg" class="errorBox hidden"></div>
-      </div>
-      </p>
-    </form>
-  </div>
+      100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+      }
+    }
 
-  <div id="userDatasDiv" class="hidden">
-    <!-- USER NOT LOGGED IN -->
-  </div>
+    @keyframes dfmload {
+      0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
+
+      10% {
+        opacity: .25;
+      }
+
+      40% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+        opacity: 1;
+      }
+
+      100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+      }
+    }
+    ]]>
+  </style>
+  <g class="c3">
+    <path fill="#4d79ff" d="m206.672 101.133c2.957 4.104 2.957 9.339-.695 13.217-2.052 1.357-3.878 2.052-6.14 2.052-2.294 0-5.009-1.131-6.835-2.731-10.244-11.844-25.95-17.984-43.046-17.984-17.305 0-32.801 6.14-42.819 17.984-3.409 3.652-9.129 3.878-12.975.695-4.088-3.878-4.339-9.113-.695-13.217 13.67-15.027 33.949-24.14 56.489-24.14 22.088-.009 43.046 9.096 56.716 24.124z" />
+    <circle cx="150" cy="150" r="64.886" fill="none" />
+  </g>
+  <g class="c2">
+    <path fill="#4d79ff" d="m149.948 64.235c-24.593 0-46.455 9.113-61.514 24.835-3.878 3.878-9.784 4.104-13.201.452-3.409-3.409-3.409-9.566 0-13.201 18.21-18.905 45.34-29.618 74.716-29.618 29.141 0 56.715 10.697 74.926 29.618 2.957 3.636 2.957 9.792-.444 13.201-2.052 2.052-4.339 2.731-6.617 2.731s-5.001-.695-6.593-3.183c-14.357-15.722-36.898-24.835-61.273-24.835z" />
+    <circle cx="150" cy="150" r="96.191" fill="none" />
+  </g>
+  <g class="c1">
+    <path fill="#4d79ff" d="m60.658 64.461c-3.636-3.636-3.878-9.339-.226-12.975 20.707-22.783 54.203-35.758 89.509-35.758s67.865 12.991 89.743 35.758c3.636 3.652 3.175 9.339-.452 12.975-1.6 1.6-3.878 2.505-6.156 2.505-2.488 0-4.557-.905-6.609-2.731-18.226-19.358-46.229-30.054-76.517-30.054-30.087 0-58.525 10.697-76.525 30.054-3.202 3.644-9.124 3.644-12.767.226z" />
+    <circle cx="150" cy="150" r="125" fill="none" />
+  </g>
+</svg>
+	</div>
+	<div id="formsDiv" class="hidden">
+		<form id="loginForm" name="loginForm" action="">
+			<h2>LOGIN</h2>
+			<label for="nameField"><strong>Username:</strong></label></br>
+			<input type="text" id="nameField" class="conwidth" name="nameField" autocomplete="on" required>
+			<div id="errorBoxName" class="errorBox hidden"></div>
+			<p>
+				<label for="passField"><strong>Password</strong> (8 characters minimum):</label></br>
+				<input type="password" id="passField" class="conwidth" name="passField" autocomplete="on" minlength="8" required>
+			<div id="errorBoxPass" class="errorBox hidden"></div>
+			</p>
+			<p>
+
+				<input type="checkbox" id="stayloggedcheck" name="stayloggedcheck">
+				<label for="stayloggedcheck">I want to stay logged in</label>
+			</p>
+			<p>
+			<div class="buttoncontainer">
+				<div id="loginProgressBox" class="progressBox hidden">Login in progress ...<img src="https://bzozoo.github.io/UserSystem/public/Frontends/img/load.webp" width=18px /></div>
+				<input class="actionbuttons" type="button" id="submitButton" name="submitButton" value="LOGIN">
+			</div>
+			</p>
+			<div id="errorBoxCommon" class="errorBox hidden"></div>
+		</form>
+
+		<br>
+		<hr>
+
+		<form id="regForm" name="regForm" autocomplete="off" action="">
+			<h2>REGISTER</h2>
+			<label for="regNameField"><strong>Username:</strong></label></br>
+			<input type="text" id="regNameField" class="conwidth" name="regNameField" autocomplete="new-password" required>
+			<div id="errorBoxRegName" class="errorBox hidden"></div>
+
+			<p>
+				<label for="regPassField"><strong>Password</strong> (8 characters minimum):</label></br>
+				<input type="password" id="regPassField" class="conwidth" name="regPassField" autocomplete="new-password" minlength="8" required>
+			<div id="errorBoxRegPass" class="errorBox hidden"></div>
+			</p>
+
+			<p>
+				<label for="regConfirmPassField"><strong>Confirm Password</strong> (8 characters minimum):</label></br>
+				<input type="password" id="regConfirmPassField" class="conwidth" name="regConfirmPassField" autocomplete="new-password" minlength="8" required>
+			<div id="errorBoxRegConfirmPass" class="errorBox hidden"></div>
+			</p>
+
+			<p>
+			<div class="buttoncontainer">
+				<p>* By pressing the registration button, you agree that <u>we will record your IP address</u> for security reasons. </p>
+				<div id="regProgressBox" class="progressBox hidden">Registration in progress ...<img src="https://bzozoo.github.io/UserSystem/public/Frontends/img/load.webp" width=18px /></div>
+				<input class="actionbuttons" type="button" id="regSubmitButton" name="regSubmitButton" value="REGISTER">
+				<div id="regSuccessBox" class="regSuccessBox hidden">Registration success! You can Log In! </div>
+				<div id="errorBoxReg" class="errorBox hidden"></div>
+			</div>
+			</p>
+		</form>
+	</div>
+
+	<div id="profileCOntainer" class="hidden">
+		<!-- USER NOT LOGGED IN -->
+	</div>
 </div>
 
 <!-- Mobile devtools NOW DISABLED
@@ -78,7 +158,5 @@
  -->
 
 <script src="dashboard.js"></script>
-
-
 </body>
 </html>

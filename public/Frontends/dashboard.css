@@ -1,127 +1,126 @@
 input {
-  padding: 5px;
-  background: #30302d14;
-  outline: none;
-  font-size: 18px;
-  border-radius: 8px;
-  box-shadow: inset 2px 2px 7px -1px grey;
+	padding: 5px;
+	background: #30302d14;
+	outline: none;
+	font-size: 18px;
+	border-radius: 8px;
+	box-shadow: inset 2px 2px 7px -1px grey;
 }
 
 button {
-  outline: none;
+	outline: none;
 }
 
 input:focus {
-  outline: none;
+	outline: none;
 }
 
 .hidden {
-  display: none;
+	display: none;
 }
 
 #container {
-  border: black 1px solid;
-  padding: 10px;
-  border-radius: 6px;
-  box-shadow: 4px 4px 40px -10px grey;
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently
+	border: black 1px solid;
+	padding: 10px;
+	border-radius: 6px;
+	box-shadow: 4px 4px 40px -10px grey;
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Old versions of Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
 }
 
+#loadingContainer {
+	text-align: center;
+}
+
 .errorBox {
-  margin-top: 5px;
-  padding: 3px;
-  background: #f7c8c8;
-  width: 97%;
-  heigth: 20px;
-  border: red 1px solid;
-  border-radius: 3px;
-  color: red;
+	margin-top: 5px;
+	padding: 3px;
+	background: #f7c8c8;
+	width: 97%;
+	heigth: 20px;
+	border: red 1px solid;
+	border-radius: 3px;
+	color: red;
 }
 
 .progressBox {
-  background: #d6eaf8;
-  margin-bottom: 10px;
-  color: blue;
-  border: blue 1px solid;
-  padding: 5px;
-  border-radius: 3px;
+	background: #d6eaf8;
+	margin-bottom: 10px;
+	color: blue;
+	border: blue 1px solid;
+	padding: 5px;
+	border-radius: 3px;
 }
 
 .regSuccessBox {
-  background: #97ec57;
-  margin-top: 10px;
-  color: green;
-  border: green 1px solid;
-  padding: 5px;
-  border-radius: 3px;
+	background: #97ec57;
+	margin-top: 10px;
+	color: green;
+	border: green 1px solid;
+	padding: 5px;
+	border-radius: 3px;
 }
 
 .conwidth {
-  width: 97%;
+	width: 97%;
 }
 
 .actionbuttons {
-  padding-top: 15px;
-  padding-bottom: 15px;
-  padding-left: 30px;
-  padding-right: 30px;
-  font-size: 20px;
-  background: #0040ffb3;
-  color: white;
-  border-radius: 7px;
-  border: none;
-  box-shadow: 4px 4px 4px 0px grey;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	padding-left: 30px;
+	padding-right: 30px;
+	font-size: 20px;
+	background: #0040ffb3;
+	color: white;
+	border-radius: 7px;
+	border: none;
+	box-shadow: 4px 4px 4px 0px grey;
 }
 
 .actionbuttons:active {
-  transform: translateY(4px);
-  background: #0040ffdb;
-  box-shadow: 4px 0px 4px -1px grey;
+	transform: translateY(4px);
+	background: #0040ffdb;
+	box-shadow: 4px 0px 4px -1px grey;
 }
 
 .actionbuttons:focus {
-  background: grey;
+	background: grey;
 }
 
 .actionbuttons:hover {
-  background: #0040ffdb;
+	background: #0040ffdb;
 }
 
 .buttoncontainer {
-  width: 100%;
-  text-align: center;
+	width: 100%;
+	text-align: center;
 }
 
 .linkbuttons {
-  padding-top: 15px;
-  padding-bottom: 15px;
-  padding-left: 30px;
-  padding-right: 30px;
-  font-size: 16px;
-  background: #ff0000ad;
-  color: white;
-  border-radius: 7px;
-  border: none;
-  box-shadow: 4px 4px 4px 0px grey;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	padding-left: 30px;
+	padding-right: 30px;
+	font-size: 16px;
+	background: #ff0000ad;
+	color: white;
+	border-radius: 7px;
+	border: none;
+	box-shadow: 4px 4px 4px 0px grey;
 }
 
 .linkbuttons:active {
-  transform: translateY(4px);
-  background: #ff0000cc;
-  box-shadow: 4px 0px 4px -1px grey;
+	transform: translateY(4px);
+	background: #ff0000cc;
+	box-shadow: 4px 0px 4px -1px grey;
 }
 
 .linkbuttons:hover {
-  background: #ff0000cc;
-}
-
-#userscoreinprofile img {
-  width: 20px;
-  heigth: 20px;
+	background: #ff0000cc;
 }
