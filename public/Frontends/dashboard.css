@@ -57,7 +57,7 @@ input:focus {
 	border-radius: 3px;
 }
 
-.regSuccessBox {
+.successBox {
 	background: #97ec57;
 	margin-top: 10px;
 	color: green;

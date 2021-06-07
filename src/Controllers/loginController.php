@@ -31,7 +31,7 @@ if(isset($_POST['nameField']) && isset($_POST['passField'])){
 	    $memberProfile = $member->getMemberByUNAME($username);
 		
         //JWT Token Create
-		$createdToken = $JWTok->createToken($memberProfile[0]["UserName"], $memberProfile[0]["ID"], $memberProfile[0]["UserSecret"], 133920);
+		$createdToken = $JWTok->createToken($memberProfile[0]["UserName"], $memberProfile[0]["ID"], $memberProfile[0]["UserSecret"], 44640);
 
         $responseHeaderSet = 200;
         header("Authorization: Bearer $createdToken");

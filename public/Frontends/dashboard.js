@@ -1,3 +1,6 @@
+let version = 'v21-dev';
+console.log(version)
+
 //API Endpoints
 const loginEndpoint = "https://usersystem.mysqhost.tk/api/login";
 const regEndpoint = "https://usersystem.mysqhost.tk/api/register";
@@ -5,36 +8,23 @@ const memberEndpoint = "https://usersystem.mysqhost.tk/api/user";
 const userScoreEndpoint = "https://usersystem.mysqhost.tk/api/userscore";
 
 //constanes and variables
-let loginForm = document.querySelector("#loginForm");
-let nameField = document.querySelector("#nameField");
-let passField = document.querySelector("#passField");
-let submitButton = document.querySelector("#submitButton");
-let regForm = document.querySelector("#regForm");
-let regNameField = document.querySelector("#regNameField");
-let regPassField = document.querySelector("#regPassField");
-let regConfirmPassField = document.querySelector("#regConfirmPassField");
-let regSubmitButton = document.querySelector("#regSubmitButton");
-const errorBoxCommon = document.querySelector("#errorBoxCommon");
-const errorBoxName = document.querySelector("#errorBoxName");
-const errorBoxPass = document.querySelector("#errorBoxPass");
-const errorBoxReg = document.querySelector("#errorBoxReg");
 const errorBoxes = document.querySelectorAll(".errorBox");
-const loginProgressBox = document.querySelector("#loginProgressBox");
-const regProgressBox = document.querySelector("#regProgressBox");
+const successBoxes = document.querySelectorAll(".successBox");
 const regSuccessBox = document.querySelector("#regSuccessBox");
 const inputBoxes = document.querySelectorAll("#container input");
-const profileCOntainer = document.querySelector("#profileCOntainer");
+
 const defaultAvatar = 'https://raw.githubusercontent.com/bzozoo/UserSystem/main/public/Frontends/img/avatar.png';
-let responseStatus;
-let storedLoginDatas;
-let storedRegisterDatas;
+let storedConnectionResponse;
+let storedLoginDatas; //Used in: loginProcess()
+let storedRegisterDatas; //Used in: registerProcess()
 let getAutHeader;
+let loadCounter = 0;
 
 ///INITIALIZATION
 
-initLoginForm();
+init();
 
-function initLoginForm() {
+function init() {
 	if (checkUserCookiesExist()) {
 		userLoggedIn();
 	} else {
@@ -45,10 +35,11 @@ function initLoginForm() {
 ///INITIALIZATION END
 
 // Connections
+//Main connection
 async function connection(url, options) {
 	const response = await fetch(url, options);
-	responseStatus = response.status;
-	console.log('Actual response.status changed to ', responseStatus)
+	storedConnectionResponse = response
+	console.log('Actual response.status changed to ', storedConnectionResponse.status)
 	let getAutHeaderAll = response.headers.get("authorization");
 	getAutHeader = getAutHeaderAll
 		? getAutHeaderAll.slice(7, getAutHeaderAll.length)
@@ -106,7 +97,7 @@ async function connectForUserDatas() {
 
 //PROCESSES
 async function loginProcess() {
-	let checkedLoginDatas = checkLoginInputDatas(nameField.value, passField.value);
+	let checkedLoginDatas = checkLoginInputDatas();
 	if (checkedLoginDatas) {
 		submitButton.disabled = true;
 		loginProgressBox.classList.remove("hidden");
@@ -125,14 +116,15 @@ async function loginProcess() {
 			console.log("We got login datas..");
 			submitButton.disabled = false;
 			loginProgressBox.classList.add("hidden");
-			if (storedLoginDatas.Login === "Failed" || responseStatus === 401) {
+			if (storedLoginDatas.Login === "Failed" || storedConnectionResponse.status === 401) {
 				console.log("Login failed");
 				showLoginFail();
 			}
-			if (storedLoginDatas.Login === "Success" || responseStatus === 200) {
+			if (storedLoginDatas.Login === "Success" || storedConnectionResponse.status === 200) {
 				console.log("Login Success");
 				createUserCookies();
-				userLoggedIn();
+				removeAllMessages()			
+				init();
 			}
 		}
 	}
@@ -140,7 +132,7 @@ async function loginProcess() {
 
 async function registerProcess() {
 	console.log("Register process function...");
-	let checkRegData = checkRegDatas();
+	let checkRegData = checkRegInputDatas();
 
 	if (checkRegData) {
 		console.log("Register input datas are okey...");
@@ -167,96 +159,35 @@ async function registerProcess() {
 	}
 }
 
-function processRegister(
-	regNameFieldValue,
-	regPassFieldValue,
-	regConfirmPassFieldValue
-) {
-	console.log("Register process start...");
-	let checkRegData = checkRegDatas(
-		regNameFieldValue,
-		regPassFieldValue,
-		regConfirmPassFieldValue
-	);
-
-	if (checkRegData) {
-		console.log("All Reg Data is correct... I will send it to server now");
-		regSubmitButton.disabled = true;
-		regProgressBox.classList.remove("hidden");
-
-		var formData = new FormData();
-		formData.append("reguser", regNameFieldValue);
-		formData.append("regpwd", regPassFieldValue);
-		//console.log(formData)
-
-		let regFetchOptions = {
-			method: "POST",
-			credentials: "include",
-			mode: "cors",
-			body: formData
-		};
-
-		fetch(regEndpoint, regFetchOptions)
-			.then((response) => {
-				if (response.ok) {
-					return response.json();
-				} else {
-					regError();
-				}
-			})
-			.then(function (data) {
-				console.log("I got DATAS : ");
-				console.log(data);
-				regSubmitButton.disabled = false;
-				regProgressBox.classList.add("hidden");
-				storedRegDatas = data;
-				//  storedLoginDatas = JSON.parse(data);
-
-				regFormMessages(storedRegDatas);
-			})
-			.catch((error) => {
-				console.error("Catch error" + error);
-				regSubmitButton.disabled = false;
-				regProgressBox.classList.add("hidden");
-				errorBoxReg.innerHTML = "Server connection error";
-				errorBoxReg.classList.remove("hidden");
-			});
-	}
-}
 
 //PROCESSES END
 
 // CHECKERS
-
-function checkLoginInputDatas(nameFieldValue, passFieldValue) {
-	if (passFieldValue.length < 8) {
-		errorBoxPass.innerHTML = "The password must be 8 characters long ";
-		errorBoxPass.classList.remove("hidden");
-	}
-
-	if (nameFieldValue === "") {
+//Login input checker and error message render. Used in: registerProcess()
+function checkLoginInputDatas() {
+	if (nameField.value === "") {
 		errorBoxName.innerHTML = "Name is empty";
 		errorBoxName.classList.remove("hidden");
 	}
 
-	if (passFieldValue === "") {
+	if (passField.value === "") {
 		errorBoxPass.innerHTML = "Password is empty";
 		errorBoxPass.classList.remove("hidden");
 	}
+	
+	if (passField.value.length < 8) {
+		errorBoxPass.innerHTML = "The password must be 8 characters long ";
+		errorBoxPass.classList.remove("hidden");
+	}
 
-	if (
-		passFieldValue != "" &&
-		nameFieldValue != "" &&
-		passFieldValue.length >= 8
-	) {
+	if(passField.value != "" && nameField.value != "" && passField.value.length >= 8){
 		return true;
 	}
 }
 
-function checkRegDatas() {
+function checkRegInputDatas() {
 	if (regPassField.value.length < 8) {
-		errorBoxRegPass.innerHTML =
-			"The register password must be 8 characters long ";
+		errorBoxRegPass.innerHTML = "The register password must be 8 characters long";
 		errorBoxRegPass.classList.remove("hidden");
 	}
 
@@ -309,18 +240,17 @@ function checkUserCookiesExist() {
 // CHECKERS END
 
 //RENDER helpers
-//Used in: userLoggedIn(), initLoginForm()
+//Used in: userLoggedIn(), init()
 function userLogOut() {
-	removeAllErrorMessage();
 	profileCOntainer.classList.add("hidden");
 	loadingContainer.classList.add("hidden");
 	profileCOntainer.innerHTML = "";
 	deleteUserCookies();
 	formsDiv.classList.remove("hidden");
-	console.log("User logged out ...");
+	if(loadCounter != 1){console.log("User logged out ...")}
 }
 
-//Used in: loginProcess(), initLoginForm()
+//Used in: loginProcess(), init()
 async function userLoggedIn() {
 	let profile = await connectForUserDatas();
 	console.log("User Profile Datas : ");
@@ -329,30 +259,36 @@ async function userLoggedIn() {
 	if (profile.User === "DoesnotExist" && profile.UserName === "Failed") {
 		errorBoxCommon.innerHTML = "User session expired! Login again";
 		errorBoxCommon.classList.remove("hidden");
+		profile = false;
 		userLogOut();
 		return;
 	}
 
 	if (profile) {
-		removeAllErrorMessage();
 		formsDiv.classList.add("hidden");
 		loadingContainer.classList.add("hidden");
 		regSuccessBox.classList.add("hidden");
+		
 
 		profileCOntainer.innerHTML = `
-		<p>WELCOME HERE <red style="color: red"><b> ${profile.UserName} </b></red> !</p>
+		<h1>WELCOME HERE <red style="color: red"><b> ${profile.UserName} </b></red> !</h1>
 		<p><img src="${(profile.UserAvatar != null || profile.UserAvatar === 'undefined')?profile.UserAvatar:defaultAvatar}" title="${profile.UserName}'s avatar" alt="avatar" width="250" height="250"/></p>
-		<p>UREGAT :  ${profile.UserRegistredAt}</p>
-		<p id="userscoreinprofile">USER SCORE : ${profile.UserScore}</p>
+		<p><b>Registed At :</b>  ${profile.UserRegistredAt.replace(/-/g, ". ").splice(12, '.')}</p><!-- Splice helper!! -->
+		<p><b>Logined At :</b>  ${new Date(profile.CreatedTimeStamp * 1000).toLocaleString()}</p>
+		<p><b>Login will be expired At :</b>  ${new Date(profile.ExpiredTimeStamp * 1000).toLocaleString()}</p>
+		<p><b>User Score :</b> ${profile.UserScore}</p>
 		<p><a target="_blank" href="https://codepen.io/bzozoo/full/VwmKOVj">
 		<button class="linkbuttons">SCORE TABLE</button></a></p>
 		<p><div class="buttoncontainer">
 		<input class="actionbuttons" id="logoutButton" name="logoutButton" type="button" value="LOGOUT" onclick="userLogOut()">
 		</div>
 		</p>`;
+	
+		profileCOntainer.classList.remove("hidden");
+		console.log('Profile Container was generated')
 	}
 
-	profileCOntainer.classList.remove("hidden");
+	
 }
 
 function showLoginFail() {
@@ -360,47 +296,38 @@ function showLoginFail() {
 	errorBoxCommon.classList.remove("hidden");
 }
 
-function removeAllErrorMessage() {
+function removeAllMessages() {
 	errorBoxes.forEach(function (errorBox) {
 		errorBox.innerHTML = "";
 		errorBox.classList.add("hidden");
 	});
+	successBoxes.forEach(function (successBox) {
+		successBox.classList.add("hidden");
+	});
+	console.log('All error messages was deleted')
 }
 
 
 //Userd in: registerProcess()
-function regFormMessages(storedRegDatas) {
-	if (
-		storedRegDatas.UserExisted === "YES" &&
-		storedRegDatas.Registration === "Failed"
-	) {
-		console.log("User Exist! Registration failed");
-		errorBoxReg.innerHTML = "User already exist!  Registration failed!";
-		errorBoxReg.classList.remove("hidden");
-		regProgressBox.classList.add("hidden");
-		regSuccessBox.classList.add("hidden");
-	}
+function regFormMessages(storedRegDatas){
+	if(storedRegDatas){
+		if(storedConnectionResponse.status === 409 || storedRegDatas.Registration === "Failed"){
+			let userexistMessage = (storedRegDatas.UserExisted === "YES")? 'User already exist!' : 'Something wrong!';
+			let regErrorMessage = 'Registration failed!'
+			errorBoxReg.innerHTML = userexistMessage + ' ' + regErrorMessage
+			errorBoxReg.classList.remove("hidden");
+			regProgressBox.classList.add("hidden");
+			regSuccessBox.classList.add("hidden");	
+		}
 
-	if (
-		storedRegDatas.UserExisted === "NO" &&
-		storedRegDatas.Registration === "Failed"
-	) {
-		console.log("Server Error. Registration failed! Try again later");
-		errorBoxReg.innerHTML = "Server Error! Registration failed! Try again later!";
-		errorBoxReg.classList.remove("hidden");
-		regProgressBox.classList.add("hidden");
-		regSuccessBox.classList.add("hidden");
-	}
 
-	if (
-		responseStatus === 201 &&
-		storedRegDatas.UserExisted === "NO" &&
-		storedRegDatas.Registration === "Success"
-	) {
-		console.log("Registration success!");
-		errorBoxReg.classList.add("hidden");
-		regSuccessBox.classList.remove("hidden");
-		regProgressBox.classList.add("hidden");
+		if (storedConnectionResponse.status === 201 && storedRegDatas.UserExisted === "NO" && storedRegDatas.Registration === "Success"){
+			console.log("Registration success!");
+			regSuccessBox.innerHTML = 'Registration Success! You can login!'
+			errorBoxReg.classList.add("hidden");
+			regSuccessBox.classList.remove("hidden");
+			regProgressBox.classList.add("hidden");
+		}
 	}
 }
 
@@ -411,7 +338,7 @@ function createUserCookies() {
 	let stayloggedcheck = document.querySelector("#stayloggedcheck");
 	var now = new Date();
 	var time = now.getTime();
-	var expireTime = time + 1000 * 400 * 36000;
+	var expireTime = time + 31 * 24 * 60 * 60 *1000;
 	now.setTime(expireTime);
 
 	let expiration = stayloggedcheck.checked
@@ -430,6 +357,8 @@ function deleteUserCookies() {
 	document.cookie = `una=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=None; Secure`;
 	document.cookie = `UTOK=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=None; Secure`;
 	document.cookie = `ses=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=None; Secure`;
+	loadCounter += 1
+	if(loadCounter != 1){console.log('All user cookies was deleted!')}
 }
 
 function getCookie(name) {
@@ -442,17 +371,34 @@ function getCookie(name) {
 
 //GENERAL helpers
 
-function loginFormValues() {
-	console.log(nameField.value);
-	console.log(passField.value);
+// String splice helper
+if (String.prototype.splice === undefined) {
+  /**
+   * Splices text within a string.
+   * @param {int} offset The position to insert the text at (before)
+   * @param {string} text The text to insert
+   * @param {int} [removeCount=0] An optional number of characters to overwrite
+   * @returns {string} A modified string containing the spliced text.
+   */
+  String.prototype.splice = function(offset, text, removeCount=0) {
+    let calculatedOffset = offset < 0 ? this.length + offset : offset;
+    return this.substring(0, calculatedOffset) +
+      text + this.substring(calculatedOffset + removeCount);
+  };
 }
 
-function loginError() {
-	console.log("Login error");
-}
+function elementChildren(element) {
+    var childNodes = element.childNodes,
+        children = [],
+        i = childNodes.length;
 
-function regError() {
-	console.log("Register error");
+    while (i--) {
+        if (childNodes[i].nodeType == 1) {
+            children.unshift(childNodes[i]);
+        }
+    }
+
+    return children;
 }
 
 //GENERAL helpers END
@@ -493,10 +439,9 @@ function loadXMLDoc(theURL) {
 //EVENT listeners
 
 inputBoxes.forEach(function (inputBox) {
-	inputBox.addEventListener("input", removeAllErrorMessage);
+	inputBox.addEventListener("input", removeAllMessages);
 });
 
 submitButton.addEventListener("click", loginProcess);
-
 regSubmitButton.addEventListener("click", registerProcess);
 //EVENT listeners END
