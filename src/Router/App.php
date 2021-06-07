@@ -27,7 +27,7 @@ $app->add(function (Request $request, RequestHandlerInterface $handler): Respons
 		$restprefix = ($_SERVER['HTTPS'] == 'on') ? "https://" : "http://";
 		$rest = $restprefix . parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
     } else {
-	$rest = "*";
+	$rest = "null";
 	}
 
     $response = $response->withHeader('Access-Control-Allow-Origin', $rest);
