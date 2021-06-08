@@ -6,8 +6,8 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 - Version: 0.44-dev
 
 ## Frontend demos
-- [Github.io DEMO](https://bzozoo.github.io/UserSystem/public/Frontends/dashboard.html){:target="_blank"}
-- [Codepen.io DEMO](https://codepen.io/bzozoo/pen/gOmjbQW?editors=0010){:target="_blank"} Actual Codepen Version: v22-dev
+- [Github.io DEMO](https://bzozoo.github.io/UserSystem/public/Frontends/dashboard.html)
+- [Codepen.io DEMO](https://codepen.io/bzozoo/pen/yLMqMPj?editors=0010) Actual Codepen Version: v23-dev
 
 ## System Reuirements:
 * PHP 7.2 or newer

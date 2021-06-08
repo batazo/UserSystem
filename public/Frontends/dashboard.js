@@ -1,4 +1,4 @@
-let version = 'v22-dev';
+let version = 'v23-dev';
 console.log(version)
 
 //API Endpoints
@@ -231,9 +231,7 @@ function checkRegInputDatas() {
 }
 
 function checkUserCookiesExist() {
-	if (
-		document.cookie.indexOf("una=") === -1 ||
-		getCookie('una') === undefined ||
+	if (((document.cookie.indexOf("una=") === -1 || getCookie('una') === undefined) && sessionStorage.getItem('una') === null && localStorage.getItem('una') === null) ||
 		!checkIdentifiers()
 	) {
 		return false;
