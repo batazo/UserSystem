@@ -3,11 +3,11 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 
 ## This project is currently under development.
 - Expect heavy code breaking changes.
-- Version: 0.43-dev
+- Version: 0.44-dev
 
 ## Frontend demos
-- [Github.io DEMO](https://bzozoo.github.io/UserSystem/public/Frontends/dashboard.html)
-- [Codepen.io DEMO](https://codepen.io/bzozoo/pen/JjWZMJg?editors=0100) Actual Codepen Version: v21-dev
+- [Github.io DEMO](https://bzozoo.github.io/UserSystem/public/Frontends/dashboard.html){:target="_blank"}
+- [Codepen.io DEMO](https://codepen.io/bzozoo/pen/gOmjbQW?editors=0010){:target="_blank"} Actual Codepen Version: v22-dev
 
 ## System Reuirements:
 * PHP 7.2 or newer
@@ -31,7 +31,7 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 
 ## API USAGE (BACKEND)
 ##### CALL FOR LOGIN #####
-<ins>Endpoint:</ins> [YourDomain/api/login](src/Views/login.php) .
+<ins>Endpoint:</ins> [YourDomain/api/login] .
 - Login endpoint waits `$_POST['nameField']` and `$_POST['passField']` datas in `POST` method
 - If Username and Password is not found in database , the login endpoint will return with this JSON object:
   ``` 
@@ -44,7 +44,7 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
   Where `session_id()` is session of logged-in user, `$_SESSION['UserID']` ID of logged-in user, `$_SESSION['UserName']` Name of logged-in user, `$memberProfile[0]['UserRegTime']` is registration date and time of logged-in user, `$memberProfile[0]['UserSecret']` is Secret token of logged-in user, `$memberProfile[0]['UserToken']` is a general token of logged-in user
 
 ##### CALL FOR USER REGISTRATION #####
-<ins>Endpoint:</ins> [YourDomain/api/register](src/Views/register.php)
+<ins>Endpoint:</ins> [YourDomain/api/register]
 - Register endpoint waits `$_POST["reguser"]` and `$_POST["regpwd"]` datas in `POST` method
 - If User exists, the registration will be failed and the regitration endpoint will return with this JSON object:
   ```

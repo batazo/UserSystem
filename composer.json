@@ -1,6 +1,6 @@
 {
   "name": "bzozoo/user-system",
-  "version": "0.43-dev",
+  "version": "0.44-dev",
   "description": "A simple user management project",
   "type": "project",
   "license": "MIT",

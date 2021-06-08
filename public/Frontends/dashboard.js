@@ -1,10 +1,11 @@
-let version = 'v21-dev';
+let version = 'v22-dev';
 console.log(version)
 
 //API Endpoints
 const loginEndpoint = "https://usersystem.mysqhost.tk/api/login";
 const regEndpoint = "https://usersystem.mysqhost.tk/api/register";
-const memberEndpoint = "https://usersystem.mysqhost.tk/api/user";
+const memberEndpointJWT = "https://usersystem.mysqhost.tk/api/user";
+const memberEndpointSes = "https://usersystem.mysqhost.tk/api/userprofile";
 const userScoreEndpoint = "https://usersystem.mysqhost.tk/api/userscore";
 
 //constanes and variables
@@ -18,6 +19,7 @@ let storedConnectionResponse;
 let storedLoginDatas; //Used in: loginProcess()
 let storedRegisterDatas; //Used in: registerProcess()
 let getAutHeader;
+let identifier;
 let loadCounter = 0;
 
 ///INITIALIZATION
@@ -25,6 +27,7 @@ let loadCounter = 0;
 init();
 
 function init() {
+	checkIdentifiers()
 	if (checkUserCookiesExist()) {
 		userLoggedIn();
 	} else {
@@ -80,17 +83,23 @@ async function connectForRegister() {
 }
 
 async function connectForUserDatas() {
-	let jwtFormData = new FormData();
-	jwtFormData.append("jwtKEY", getCookie("UTOK"));
+	checkIdentifiers()
+	let postKEY = (identifier.Mode === 'UTOK')? 'jwtKEY' : 'sessid'
+	let endpointForMember = (identifier.Mode === 'UTOK')? memberEndpointJWT : memberEndpointSes
+	console.log('Identifier methods :')
+	console.log(identifier.Type, postKEY, endpointForMember)
+	
+	let formData = new FormData();
+	formData.append(postKEY, identifier.Value);
 
 	let options = {
 		method: "POST",
-		body: jwtFormData,
+		body: formData,
 		credentials: "include",
 		mode: "cors",
 		cache: "no-cache"
 	};
-	return await connection(memberEndpoint, options);
+	return await connection(endpointForMember, options);
 }
 
 // Connections END
@@ -224,11 +233,8 @@ function checkRegInputDatas() {
 function checkUserCookiesExist() {
 	if (
 		document.cookie.indexOf("una=") === -1 ||
-		document.cookie.indexOf("una=") === "ubdefined" ||
-		document.cookie.indexOf("UTOK=") === -1 ||
-		document.cookie.indexOf("UTOK=") === "undefined" ||
-		document.cookie.indexOf("ses=") === -1 ||
-		document.cookie.indexOf("ses=") === "undefined"
+		getCookie('una') === undefined ||
+		!checkIdentifiers()
 	) {
 		return false;
 	} else {
@@ -237,11 +243,33 @@ function checkUserCookiesExist() {
 	}
 }
 
+//Check and set identifier
+function checkIdentifiers(){
+	identifier = false
+	
+	if(document.cookie.indexOf("UTOK=") >= 10 || getCookie('UTOK') != undefined){
+		identifier = {'Type':'Cookie', 'Mode':'UTOK', 'Value': getCookie('UTOK')}
+	} else if((localStorage.getItem("UTOK") != null)){
+		identifier = {'Type':'localStorage', 'Mode':'UTOK', 'Value': localStorage.getItem("UTOK")}
+	} else if((sessionStorage.getItem("UTOK") != null)){
+		identifier = {'Type':'sessionStorage', 'Mode':'UTOK', 'Value': sessionStorage.getItem("UTOK")}
+	} else 	if(document.cookie.indexOf("ses=") >= 10 || getCookie('ses') != undefined){
+		identifier = {'Type':'Cookie', 'Mode':'ses', 'Value': getCookie('ses')}
+	} else if((localStorage.getItem("ses") != null)){
+		identifier = {'Type':'localStorage', 'Mode':'ses', 'Value': localStorage.getItem("ses")}
+	} else if((sessionStorage.getItem("ses") != null)){
+		identifier = {'Type':'sessionStorage', 'Mode':'ses', 'Value': sessionStorage.getItem("ses")}
+	}
+	
+	return identifier
+}
+
 // CHECKERS END
 
 //RENDER helpers
 //Used in: userLoggedIn(), init()
 function userLogOut() {
+	console.log(identifier)
 	profileCOntainer.classList.add("hidden");
 	loadingContainer.classList.add("hidden");
 	profileCOntainer.innerHTML = "";
@@ -338,25 +366,65 @@ function createUserCookies() {
 	let stayloggedcheck = document.querySelector("#stayloggedcheck");
 	var now = new Date();
 	var time = now.getTime();
-	var expireTime = time + 31 * 24 * 60 * 60 *1000;
+	var expireTime = time + 30 * 24 * 60 * 60 *1000;
 	now.setTime(expireTime);
 
 	let expiration = stayloggedcheck.checked
 		? `expires=${now.toUTCString()};`
 		: "";
 	console.log(`Cookie expirations : ${expiration}`);
-
+	
+	//Create cookies
 	document.cookie = `una=${storedLoginDatas.UserName}; ${expiration} path=/; SameSite=None; Secure`;
 	document.cookie = `UTOK=${storedLoginDatas.UTOK}; ${expiration} path=/; SameSite=None; Secure`;
 	document.cookie = `ses=${storedLoginDatas.SessionId}; ${expiration} path=/; SameSite=None; Secure`;
+	if(stayloggedcheck.checked){
+		document.cookie = `sescrea=${time}; ${expiration} path=/; SameSite=None; Secure`;
+		document.cookie = `sesexp=${expiration}; ${expiration} path=/; SameSite=None; Secure`;
+	}
+	
+	//Save to sessionStorage
+	if(!stayloggedcheck.checked){ 
+		sessionStorage.setItem('una', storedLoginDatas.UserName)
+		sessionStorage.setItem('UTOK', storedLoginDatas.UTOK)
+		sessionStorage.setItem('ses', storedLoginDatas.SessionId)
+		sessionStorage.setItem('ses-exp', expireTime)
+	}
+	
+	//Save to localStorage
+	if(stayloggedcheck.checked){ 
+		localStorage.setItem('una', storedLoginDatas.UserName)
+		localStorage.setItem('UTOK', storedLoginDatas.UTOK)
+		localStorage.setItem('ses', storedLoginDatas.SessionId)
+		localStorage.setItem('ses-crea', time)
+		localStorage.setItem('ses-exp', expireTime)
+	}
 }
 
 //Used in: userLogOut()
 function deleteUserCookies() {
+	//Cookies
 	document.cookie = `PHPSESSID=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=None; Secure`;
 	document.cookie = `una=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=None; Secure`;
 	document.cookie = `UTOK=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=None; Secure`;
 	document.cookie = `ses=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=None; Secure`;
+	
+	//sessionStorage-s
+	sessionStorage.removeItem('una')
+	sessionStorage.removeItem('UTOK')
+	sessionStorage.removeItem('ses')
+	
+	//localStorage  -s
+	localStorage.removeItem('una')
+	localStorage.removeItem('UTOK')
+	localStorage.removeItem('ses')
+	localStorage.removeItem('ses-crea')
+	localStorage.removeItem('ses-exp')
+	
+	//Identifier init
+	identifier = false
+	
+	
 	loadCounter += 1
 	if(loadCounter != 1){console.log('All user cookies was deleted!')}
 }
