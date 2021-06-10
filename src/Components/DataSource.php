@@ -26,9 +26,9 @@ class DataSource extends Component
      */
     function __construct()
     {
-		if(!isset($wehaveconn)){
-        $this->conn = $this->getConnection();
-		$wehaveconn = 1;
+        if(!isset($wehaveconn)){
+            $this->conn = $this->getConnection();
+            $wehaveconn = 1;
         }
 	}
 
@@ -38,8 +38,8 @@ class DataSource extends Component
      */
     public function getConnection()
     {
-		$dbinipath = realpath(__DIR__ . "/../../db-config.ini");
-		$dbconf = parse_ini_file($dbinipath);
+        $dbinipath = realpath(__DIR__ . "/../../db-config.ini");
+        $dbconf = parse_ini_file($dbinipath);
         $conn = new \mysqli($dbconf['host'], $dbconf['dbuser'], $dbconf['dbpass'], $dbconf['dbname']);
 
         if (mysqli_connect_errno()) {
@@ -105,10 +105,12 @@ class DataSource extends Component
     public function del($query, $paramType, $paramArray)
     {
         $stmt = $this->conn->prepare($query);
-		//$stmt->bind_param($paramType, $paramArray);
+        
+        //$stmt->bind_param($paramType, $paramArray);
         $this->bindQueryParams($stmt, $paramType, $paramArray);
         $stmt->execute();
         $delId = $stmt->del_id;
+        
         return $delId;
     }
 
