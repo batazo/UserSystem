@@ -5,7 +5,7 @@ if(isset($_SERVER["HTTP_REFERER"])){
     
     $rest = $restprefix . parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
     } else {
-         $rest = "*";
+         $rest = "null";
     }
     
     header('Access-Control-Allow-Credentials: true');

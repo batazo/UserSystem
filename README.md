@@ -3,7 +3,7 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 
 ## This project is currently under development.
 - Expect heavy code breaking changes.
-- Version: 0.45-dev
+- Version: 0.46-dev
 
 ## Frontend demos
 - [Github.io DEMO](https://bzozoo.github.io/UserSystem/public/Frontends/dashboard.html)
@@ -33,7 +33,7 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 ##### CALL FOR LOGIN #####
 
 ***Endpoint:***
-```
+```bash
 <ins>Path:</ins> {{YourDomain}}/api/login
 Method: POST
 ```
@@ -46,8 +46,8 @@ Method: POST
 
 
 ***Responses:***
-If Status 401 (Unauthorized) | Type: JSON
-```
+- If Status 401 (Unauthorized) | Type: JSON
+```js
 {
     "Login": "Failed",
     "SessionId": "Failed",
@@ -58,7 +58,7 @@ If Status 401 (Unauthorized) | Type: JSON
 ```
 
 If Status 200 (OK) | Type: JSON
-```
+```js
 {
     "Login": "Success",
     "SessionId": "String",
@@ -70,7 +70,7 @@ If Status 200 (OK) | Type: JSON
 
 ##### CALL FOR USER REGISTRATION #####
 ***Endpoint:***
-```
+```bash
 <ins>Path:</ins> {{YourDomain}}/api/register
 Method: POST
 ```
@@ -82,22 +82,22 @@ Method: POST
 | regpwd | UserPassword |
 
 ***Responses:***
-If Status 201 (Created)
-```
+- If Status 201 (Created)
+```js
 {
     "UserExisted": "NO",
     "Registration": "Success"
 }
 ```
 If Status 409 (Conflict) | If User already exist | Type: JSON
-```
+```js
 {
     "UserExisted": "YES",
     "Registration": "Failed"
 }
 ```
 If Status 409 (Conflict) | If other problem | Type: JSON
-```
+```js
 {
     "UserExisted": "NO",
     "Registration": "Failed"
@@ -105,9 +105,10 @@ If Status 409 (Conflict) | If other problem | Type: JSON
 ```
 
  ##### CALL FOR MEMBER DATAS #####
- IF JWT Authentication with POST
+ - IF JWT Authentication with POST
+ 
  ***Endpoint:***
-```
+```bash
 <ins>Path:</ins> {{YourDomain}}/api/user
 Method: POST
 ```
@@ -116,9 +117,10 @@ Method: POST
 |-----|-------------|
 | jwtKEY | JWT string |
 
- IF JWT Authentication with Authorizon header
+ - IF JWT Authentication with Authorizon header
+ 
  ***Endpoint:***
-```
+```bash
 <ins>Path:</ins> {{YourDomain}}/api/user
 Method: -
 ```
@@ -127,9 +129,10 @@ Method: -
 | --- | ------|-------------|
 | Authorization | Bearer + JWTstring | The JWT received by the login endpoint  |
 
-IF SessionID Authentication with POST | Type: JSON
+- IF SessionID Authentication with POST | Type: JSON
+ 
  ***Endpoint:***
-```
+```bash
 <ins>Path:</ins> {{YourDomain}}/api/userprofile
 Method: POST
 ```
@@ -138,24 +141,27 @@ Method: POST
 |-----|-------------|
 | sessid | Sessionstring |
 
-IF SessionID Authentication on same domain
+- IF SessionID Authentication on same domain
+ 
  ***Endpoint:***
-```
+```bash
 <ins>Path:</ins> {{YourDomain}}/api/profile
 Method: GET
 Notes: POST key or Header is not necessary. PHPSESSION cookie need
 ```
 
 ***Responses:***
-If Status 401 (Unauthorized) | Type: JSON
-```
+
+- If Status 401 (Unauthorized) | Type: JSON
+```js
 {
     "UserName": "Failed",
     "User": "DoesnotExist"
 }
 ```
-If Status 200 (OK) | Type: JSON
-```
+
+- If Status 200 (OK) | Type: JSON
+```js
 {
     "CreatedTimeStamp": <<Timestamp>>,
     "ActuallTimeStamp": <<Timestamp>>,
@@ -169,9 +175,10 @@ If Status 200 (OK) | Type: JSON
 }
 ```
 
-UserExist check
+- UserExist check
+ 
  ***Endpoint:***
- ```
+ ```bash
 <ins>Path:</ins> {{YourDomain}}/api/membercheck/<<QueryParam>>
 Method: GET
 ```
@@ -181,24 +188,28 @@ Method: GET
 | <<QueryParam>> | UserName string. Example: '/api/membercheck/Bzozoo' |
 
 ***Responses:***
-If User exist. | Type: Text
+
+- If User exist. | Type: Text
 YES
-If User does not exist. | Type: Text
+
+- If User does not exist. | Type: Text
 NO
 
 
 ##### CALL FOR USER SCORES #####
-All User Scores:
+- All User Scores:
+
 ***Endpoint:***
-```
+```bash
 <ins>Path:</ins> {{YourDomain}}/api/userscore
 Method: GET
 ```
 - This endpoint don't wait datas. It will return automaticaly with all username data and their scores in JSON format
 
-Single User Score:
+- Single User Score:
+
 ***Endpoint:***
-```
+```bash
 <ins>Path:</ins> {{YourDomain}}/api/userscore/<<QueryParam>>
 Method: GET
 ```
@@ -207,16 +218,18 @@ Method: GET
 |-----|-------------|
 | <<QueryParam>> | UserName string. Example: '/api/userscore/Bzozoo' |
 
-***Responses***
-If User Exist | Status 200 | Type: JSON
-```
+***Responses:***
+
+- If User Exist | Status 200 | Type: JSON
+```js
 {
     "UserName": <<String>>,
     "UserScore": <<Number>>
 }
 ```
-If User does not exist | Status 200 | Type: JSON
-```
+
+- If User does not exist | Status 200 | Type: JSON
+```js
 {
     "UserName": "UserName does not exist",
     "UserScore": "UserScore does not exist"

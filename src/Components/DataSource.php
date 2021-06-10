@@ -40,12 +40,24 @@ class DataSource extends Component
     {
         $dbinipath = realpath(__DIR__ . "/../../db-config.ini");
         $dbconf = parse_ini_file($dbinipath);
-        $conn = new \mysqli($dbconf['host'], $dbconf['dbuser'], $dbconf['dbpass'], $dbconf['dbname']);
 
-        if (mysqli_connect_errno()) {
-            trigger_error("Problem with connecting to database.");
+        try{
+            mysqli_report(MYSQLI_REPORT_STRICT | MYSQLI_REPORT_ERROR);
+            error_reporting(0);
+            $conn = new \mysqli($dbconf['host'], $dbconf['dbuser'], $dbconf['dbpass'], $dbconf['dbname']);
+            error_reporting(-1);
+        }
+        catch(\mysqli_sql_exception  $e)
+        {
+            require_once __DIR__ . '/../Views/connectionExceptionView.php';
         }
 
+        //if ($conn->connect_errno) {
+            //printf("Connect failed: %s\n", $conn->connect_error);
+            //die();
+        //}
+        
+        
         $conn->set_charset("utf8");
         return $conn;
     }

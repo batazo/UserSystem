@@ -7,6 +7,7 @@ $successCheck;
 $existMemberCheck;
  
 $data = Array(
+    'Connection' => 'Success',
     'UserExisted' => 'NotChecked',
     'Registration' => 'NotChecked'
 );
@@ -28,6 +29,7 @@ if(isset($_POST["reguser"]) && isset($_POST["regpwd"])){
         $responseHeaderSet = ($registration) ? 201 : 409;
     }
     $data = Array(
+        "Connection" => "Success",
         'UserExisted' => $existMemberCheck,
         'Registration' => $successCheck
     );

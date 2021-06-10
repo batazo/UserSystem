@@ -6,6 +6,7 @@ header("Content-Type: application/json");
 $responseHeaderSet = 401;
 
 $data = Array(
+    "Connection" => "Success",
     'Login' => 'Failed',
     'SessionId' => 'Failed',
     'UTOK' => 'Failed',
@@ -37,6 +38,7 @@ if(isset($_POST['nameField']) && isset($_POST['passField'])){
         header("Authorization: Bearer $createdToken");
 
 		$data = Array(
+            "Connection" => "Success",
             'Login' => 'Success',
             'SessionId' => session_id(),
             'UTOK' => $createdToken,

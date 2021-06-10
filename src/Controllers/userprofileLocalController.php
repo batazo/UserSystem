@@ -5,6 +5,7 @@ header("Content-Type: application/json");
 $responseHeaderSet = 401;
 
 $data = Array(
+    "Connection" => "Success",
     'UserName' => 'Failed',
     'User' => 'DoesnotExist'
  );
@@ -19,6 +20,7 @@ $data = Array(
      
         $responseHeaderSet = 200;
         $data = Array(
+            "Connection" => "Success",
             'ActuallTimeStamp' => $now->getTimestamp(),
             'UserRegistredAt' => $memberProfile[0]["UserRegTime"],
             'UserName' => $_SESSION["UserName"],

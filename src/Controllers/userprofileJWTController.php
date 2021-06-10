@@ -6,6 +6,7 @@ header("Content-Type: application/json");
 $responseHeaderSet = 401;
 $JWTKey = false;
 $data = Array(
+    "Connection" => "Success",
     'UserName' => 'Failed',
     'User' => 'DoesnotExist'
  );
@@ -41,6 +42,7 @@ if($JWTKey){
                 ){
                     $responseHeaderSet = 200;
                     $data = Array(
+                        "Connection" => "Success",
                         'CreatedTimeStamp' => $tokenUserDatas->iat,
                         'ActuallTimeStamp' => $now->getTimestamp(),
                         'ExpiredTimeStamp' => $tokenUserDatas->exp,

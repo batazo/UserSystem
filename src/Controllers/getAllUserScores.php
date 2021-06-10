@@ -8,7 +8,7 @@ $scoreAll = new Score();
 $scoreResult = $scoreAll->getAllUserScore();
 
 foreach ($scoreResult as &$userEntities) {
-     $data[] = Array("UserName" => $userEntities["UserName"], "UserScore" => $userEntities["UserScore"]);
+     $data[] = Array("Connection" => "Success", "UserName" => $userEntities["UserName"], "UserScore" => $userEntities["UserScore"]);
 }
 
 $templateVariables = [ 
