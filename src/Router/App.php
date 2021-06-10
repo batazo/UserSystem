@@ -34,13 +34,32 @@ $app->add(function (Request $request, RequestHandlerInterface $handler): Respons
 	$response = $response->withHeader('Access-Control-Allow-Credentials', 'true');
     $response = $response->withHeader('Access-Control-Allow-Methods', implode(',', $methods));
     $response = $response->withHeader('Access-Control-Allow-Headers', $requestHeaders);
+    //$response = $response->withHeader('Access-Control-Allow-Headers', 'Authorization');
     $response = $response->withHeader('Access-Control-Expose-Headers', 'Authorization');
+    $response = $response->withHeader('Access-Control-Request-Headers', 'Authorization');
 
-    // Optional: Allow Ajax CORS requests with Authorization header
-    // $response = $response->withHeader('Access-Control-Allow-Credentials', 'true');
+    if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
-    return $response;
+        $response = $response->withHeader('X-OPTION-CHECKER-2', 'YES, It is option');
+    } else {
+
+        $response = $response->withHeader('X-OPTION-CHECKER-2', 'NO, It is not an option request');
+    }
+    
+    if ( ! $request->isOptions()) {
+        // this continues the normal flow of the app, and will return the proper body
+        $response = $response->withHeader('X-OPTION-CHECKER', 'NO. It is not isOptions()');
+        return $response;
+    } else {
+        //stops the app, and sends the response
+        $response = $response->withHeader('X-OPTION-CHECKER', 'YES. It is isOptions()');
+        return $response;
+    }
+
+    
 });
+
+
 
 
 // Add routes
@@ -89,6 +108,25 @@ $app->get('/api/membercheck/', function (Request $request, Response $response, $
 });
 $app->redirect('/api/membercheck', '/api/membercheck/', 301);
 
+
+//User profile JSON DATAs ( by JWT )
+$app->map(['GET', 'POST'], '/api/user', function (Request $request, Response $response, $args) {
+
+    require_once '../private/src/Controllers/userprofileJWTController.php';
+    
+    $renderer = new PhpRenderer('../private/src/Views', $templateVariables);
+    return $renderer->render($response->withStatus($responseHeaderSet)->withHeader('X-UserProfile', 'REQ USER PROFILE'), "jsonView.php", $args);
+});
+
+//OptionWildcard for /api/user
+$app->options('/api/user', function ($request, $response, $args) {
+    return $response;
+});
+
+//Redirect /api/user/ to /api/user
+$app->redirect('/api/user/', '/api/user', 301);
+
+
 //User profile JSON DATAs ( by sessionid )
 $app->map(['GET', 'POST'], '/api/userprofile', function (Request $request, Response $response, $args) {
 
@@ -98,17 +136,13 @@ $app->map(['GET', 'POST'], '/api/userprofile', function (Request $request, Respo
     return $renderer->render($response->withStatus($responseHeaderSet), "jsonView.php", $args);
 });
 
-//User profile JSON DATAs ( by JWT )
-$app->map(['GET', 'POST'], '/api/user', function (Request $request, Response $response, $args) {
-
-    require_once '../private/src/Controllers/userprofileJWTController.php';
-    
-    $renderer = new PhpRenderer('../private/src/Views', $templateVariables);
-    return $renderer->render($response->withStatus($responseHeaderSet), "jsonView.php", $args);
+//OptionWildcard for /api/userprofile
+$app->options('/api/userprofile', function ($request, $response, $args) {
+    return $response;
 });
 
-//Redirect /api/user/ to /api/user
-$app->redirect('/api/user/', '/api/user', 301);
+//Redirect /api/userprofile/ to /api/userprofile
+$app->redirect('/api/userprofile/', '/api/userprofile', 301);
 
 //User profile LOCAL JSONdata in same domain, if backeds and frontend are on same domain and PHPSESSID cookie is exist
 $app->get('/api/profile', function (Request $request, Response $response, $args) {

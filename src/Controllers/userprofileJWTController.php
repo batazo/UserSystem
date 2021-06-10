@@ -58,9 +58,7 @@ if($JWTKey){
             
         }
     }
-    
-
-    
+ 
 }
 
 $templateVariables = [

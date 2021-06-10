@@ -3,7 +3,7 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 
 ## This project is currently under development.
 - Expect heavy code breaking changes.
-- Version: 0.44-dev
+- Version: 0.45-dev
 
 ## Frontend demos
 - [Github.io DEMO](https://bzozoo.github.io/UserSystem/public/Frontends/dashboard.html)
@@ -31,54 +31,197 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 
 ## API USAGE (BACKEND)
 ##### CALL FOR LOGIN #####
-<ins>Endpoint:</ins> [YourDomain/api/login] .
-- Login endpoint waits `$_POST['nameField']` and `$_POST['passField']` datas in `POST` method
-- If Username and Password is not found in database , the login endpoint will return with this JSON object:
-  ``` 
-  '{"Login": "Failed", "UserID":"Failed", "UserName":"Failed", "UserRegistredAt":"Failed", "UserSecret":"Failed", "UserToken":"Failed"}'
-  ```
-- If Username and Password is match , the login endpoint will return with this JSON object:
-  ```
-  '{"Login": "Success", "SessionId":"'. session_id() .'" ,"UserID":"'. $_SESSION['UserID'] .'","UserName":"'. $_SESSION['UserName'] .'", "UserRegistredAt":"'. $memberProfile[0]['UserRegTime'] .'", "UserSecret":"'. $memberProfile[0]['UserSecret'] .'", "UserToken":"'. $memberProfile[0]['UserToken'] .'"}'
-  ```
-  Where `session_id()` is session of logged-in user, `$_SESSION['UserID']` ID of logged-in user, `$_SESSION['UserName']` Name of logged-in user, `$memberProfile[0]['UserRegTime']` is registration date and time of logged-in user, `$memberProfile[0]['UserSecret']` is Secret token of logged-in user, `$memberProfile[0]['UserToken']` is a general token of logged-in user
+
+***Endpoint:***
+```
+<ins>Path:</ins> {{YourDomain}}/api/login
+Method: POST
+```
+
+***QueryParams:***
+| KEY | Description |
+|-----|-------------|
+| nameField | UserName |
+| passField | UserPassword |
+
+
+***Responses:***
+If Status 401 (Unauthorized) | Type: JSON
+```
+{
+    "Login": "Failed",
+    "SessionId": "Failed",
+    "UTOK": "Failed",
+    "UserName": "Failed",
+    "UserScore": "Failed"
+}
+```
+
+If Status 200 (OK) | Type: JSON
+```
+{
+    "Login": "Success",
+    "SessionId": "String",
+    "UTOK": " JWT String ",
+    "UserName": "String",
+    "UserScore": Number
+}
+```
 
 ##### CALL FOR USER REGISTRATION #####
-<ins>Endpoint:</ins> [YourDomain/api/register]
-- Register endpoint waits `$_POST["reguser"]` and `$_POST["regpwd"]` datas in `POST` method
-- If User exists, the registration will be failed and the regitration endpoint will return with this JSON object:
-  ```
-  {'UserExisted' : "YES", 'Registration' : "Failed"}
-  ```
-- If User does not exist in system but there are an other error, the register endpoint will return with this JSON object:
-  ```
-  {'UserExisted' : "NO", 'Registration' : "Failed"}
-  ```
-- If User does not exist and there are not an other error, the register endpoint will return with this JSON object:
-  ```
-  {'UserExisted' : "NO", 'Registration' : "Success"}
-  ```
-  In this case, the registration will be complete.
- 
- ##### CALL FOR MEMBER DATAS #####
- <ins>Endpoint:</ins> [YourDomain/api/userprofile]
- - Member endpoint waits `$_POST['sessid']` data from frontend
- - If this session does not exist in the server, the member endpoint will return with this JSON object:
-   ```
-     { 'UserName' : 'Failed', 'User' : 'DoesnotExist' }
-   ```
- -  If this session does not exist in the server, the member endpoint will return same datas as the login endpoint.
-  <ins>Endpoint:</ins> [YourDomain/api/profile]
-  - If the frontend are on same server if the frontend is on the same server as the backend, this endpoint will use the PHPSESSION cookie datas and it will return same data as login endpoint
+***Endpoint:***
+```
+<ins>Path:</ins> {{YourDomain}}/api/register
+Method: POST
+```
 
-<ins>Endpoint:</ins> [YourDomain/api/membercheck/SEARCHED-MEMBERNAME]
-- This endpoint waits `SEARCHED-MEMBERNAME` data from URL in `POST` method and it will return with simple YES or NO in text format, depending on user exists or does not exist
+***QueryParams:***
+| KEY | Description |
+|-----|-------------|
+| reguser | UserName |
+| regpwd | UserPassword |
+
+***Responses:***
+If Status 201 (Created)
+```
+{
+    "UserExisted": "NO",
+    "Registration": "Success"
+}
+```
+If Status 409 (Conflict) | If User already exist | Type: JSON
+```
+{
+    "UserExisted": "YES",
+    "Registration": "Failed"
+}
+```
+If Status 409 (Conflict) | If other problem | Type: JSON
+```
+{
+    "UserExisted": "NO",
+    "Registration": "Failed"
+}
+```
+
+ ##### CALL FOR MEMBER DATAS #####
+ IF JWT Authentication with POST
+ ***Endpoint:***
+```
+<ins>Path:</ins> {{YourDomain}}/api/user
+Method: POST
+```
+***QueryParams:***
+| KEY | Description |
+|-----|-------------|
+| jwtKEY | JWT string |
+
+ IF JWT Authentication with Authorizon header
+ ***Endpoint:***
+```
+<ins>Path:</ins> {{YourDomain}}/api/user
+Method: -
+```
+***Headers:***
+| Key | Value | Description |
+| --- | ------|-------------|
+| Authorization | Bearer + JWTstring | The JWT received by the login endpoint  |
+
+IF SessionID Authentication with POST | Type: JSON
+ ***Endpoint:***
+```
+<ins>Path:</ins> {{YourDomain}}/api/userprofile
+Method: POST
+```
+***QueryParams:***
+| KEY | Description |
+|-----|-------------|
+| sessid | Sessionstring |
+
+IF SessionID Authentication on same domain
+ ***Endpoint:***
+```
+<ins>Path:</ins> {{YourDomain}}/api/profile
+Method: GET
+Notes: POST key or Header is not necessary. PHPSESSION cookie need
+```
+
+***Responses:***
+If Status 401 (Unauthorized) | Type: JSON
+```
+{
+    "UserName": "Failed",
+    "User": "DoesnotExist"
+}
+```
+If Status 200 (OK) | Type: JSON
+```
+{
+    "CreatedTimeStamp": <<Timestamp>>,
+    "ActuallTimeStamp": <<Timestamp>>,
+    "ExpiredTimeStamp": <<Timestamp>>,
+    "UserRegistredAt": <<Date>>,
+    "UserName": <<String>>,
+    "UserAvatar": <<URL or null>>,
+    "UserScore": <<Number>>,
+    "UserSpeed": <<Number or null>>,
+    "User": "Exist"
+}
+```
+
+UserExist check
+ ***Endpoint:***
+ ```
+<ins>Path:</ins> {{YourDomain}}/api/membercheck/<<QueryParam>>
+Method: GET
+```
+***QueryParams:***
+| KEY | Description |
+|-----|-------------|
+| <<QueryParam>> | UserName string. Example: '/api/membercheck/Bzozoo' |
+
+***Responses:***
+If User exist. | Type: Text
+YES
+If User does not exist. | Type: Text
+NO
+
 
 ##### CALL FOR USER SCORES #####
-<ins>Endpoint:</ins> [YourDomain/api/userscore/SEARCHED-USERNAME] (where SEARCHED-USERNAME is the name of the user whose score information I want to retrieve )
-- This endpoint waits `SEARCHED-USERNAME` data in `GET` method from URL and it will return with `{ 'UserName' : 'USERNAME', 'UserScore' : 'USERSCORE'}` object if user exists and with `{"UserName": "UserName does not exist", "UserScore":"UserScore does not exist"}` object if user does not exist
-<ins>Endpoint:</ins> [YourDomain/api/userscore]
-- This endpoint don't wait datas. It will return automaticaly with all username data and their scores
+All User Scores:
+***Endpoint:***
+```
+<ins>Path:</ins> {{YourDomain}}/api/userscore
+Method: GET
+```
+- This endpoint don't wait datas. It will return automaticaly with all username data and their scores in JSON format
+
+Single User Score:
+***Endpoint:***
+```
+<ins>Path:</ins> {{YourDomain}}/api/userscore/<<QueryParam>>
+Method: GET
+```
+***QueryParams:***
+| KEY | Description |
+|-----|-------------|
+| <<QueryParam>> | UserName string. Example: '/api/userscore/Bzozoo' |
+
+***Responses***
+If User Exist | Status 200 | Type: JSON
+```
+{
+    "UserName": <<String>>,
+    "UserScore": <<Number>>
+}
+```
+If User does not exist | Status 200 | Type: JSON
+```
+{
+    "UserName": "UserName does not exist",
+    "UserScore": "UserScore does not exist"
+}
+```
 
 ## JavaScript/FetchAPI USAGE (FRONTEND)
 ##### SEND DATA FOR LOGIN #####
@@ -108,7 +251,6 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 				
 				storedLoginDatas = data;
 				
-
 				if (storedLoginDatas.Login === "Success") {
 					// Do something if login success
 				}
@@ -147,16 +289,16 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 			})
 			.then(function (data) {
 			
-			  	if (data.UserExist === "NO" && data.Registration === "Success") {
+			  	if (data.UserExisted === "NO" && data.Registration === "Success") {
                                // Do something, if user registration is success
 			       }
 			       			       
-			  	if (data.UserExist === "YES" && data.Registration === "Failed") {
+			  	if (data.UserExisted === "YES" && data.Registration === "Failed") {
                                // Do something, if user registration is failed, becouse User is already exist
 			       }
 			       
 			       			
-			  	if (data.UserExist === "NO" && data.Registration === "Failed") {
+			  	if (data.UserExisted === "NO" && data.Registration === "Failed") {
                                // Do something, if user registration is failed, becouse there are other problem
 			       }
 				
@@ -169,6 +311,38 @@ User Dasboard. User handler system with JSON api (PHP based backend) and Fetch A
 ```
 
 ##### SEND DATA FOR USER PROFILE #####
+- With JWT key
+```
+async function sendRequestForActualUserProfile(jwtKEY) {
+	let jwtData = new FormData();
+	jwtData.append("jwtKEY", jwtKEY);
+
+	let fetchOptions = {method: "POST", body: jwtData,	credentials: "include",	mode: "cors", cache: "no-cache"};
+        let memberEndpoint = "YOURSERVERPATH/api/userprofile"
+	
+	let responsedjson = false;
+	try {
+		const response = await fetch(memberEndpoint, fetchOptions);
+		responsedjson = await response.json();
+	} catch (error) {
+		console.log("Error in member request");
+		console.log(Error);
+		responsedjson = false;
+	}
+	return responsedjson;
+}
+
+async function getLoggedInUserProfile(jwt) {
+	let data = await sendRequestForActualUserProfile(jwt));
+	let profile = await data;
+	return profile;
+}
+
+let jwtFromCookie = 'JWT string'
+let actualUserProfileDatas = await getLoggedInUserProfile(jwtFromCookie)
+```
+
+- With Session
 ```
 async function sendRequestForActualUserProfile(session) {
 	let sessionData = new FormData();
