@@ -192,9 +192,11 @@ Method: GET
 ***Responses:***
 
 - If User exist. | Type: Text
+
 YES
 
 - If User does not exist. | Type: Text
+
 NO
 
 
