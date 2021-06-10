@@ -30,7 +30,7 @@ class DataSource extends Component
             $this->conn = $this->getConnection();
             $wehaveconn = 1;
         }
-	}
+    }
 
     /**
      * Todo: Recalibrate file path
