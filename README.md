@@ -46,6 +46,7 @@ Method: POST
 
 
 ***Responses:***
+
 - If Status 401 (Unauthorized) | Type: JSON
 ```js
 {
@@ -57,7 +58,7 @@ Method: POST
 }
 ```
 
-If Status 200 (OK) | Type: JSON
+- If Status 200 (OK) | Type: JSON
 ```js
 {
     "Login": "Success",
@@ -89,14 +90,15 @@ Method: POST
     "Registration": "Success"
 }
 ```
-If Status 409 (Conflict) | If User already exist | Type: JSON
+
+- If Status 409 (Conflict) | If User already exist | Type: JSON
 ```js
 {
     "UserExisted": "YES",
     "Registration": "Failed"
 }
 ```
-If Status 409 (Conflict) | If other problem | Type: JSON
+- If Status 409 (Conflict) | If other problem | Type: JSON
 ```js
 {
     "UserExisted": "NO",
@@ -204,7 +206,7 @@ NO
 <ins>Path:</ins> {{YourDomain}}/api/userscore
 Method: GET
 ```
-- This endpoint don't wait datas. It will return automaticaly with all username data and their scores in JSON format
+This endpoint don't wait datas. It will return automaticaly with all username data and their scores in JSON format
 
 - Single User Score:
 
