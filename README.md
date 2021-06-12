@@ -1,5 +1,5 @@
 # UserSystem
-User Dasboard. User handler system with JSON api (PHP based backend) and Fetch API (Javascript based frontend)
+User handler (Login and Register) systrem (PHP RESTful API based backend) and Fetch API (Javascript based frontend)
 
 ## This project is currently under development.
 - Expect heavy code breaking changes.
