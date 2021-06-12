@@ -1,5 +1,5 @@
 <?php
 
-//Set Router App
-require '../private/src/Router/App.php';
+//Set Slim App
+require '../private/src/App/App.php';
 exit;
