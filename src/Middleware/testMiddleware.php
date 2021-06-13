@@ -4,28 +4,31 @@ namespace UserSystem\Middleware;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Slim\Psr7\Response;
 use Slim\Routing\RouteContext;
 
 //Test before middleware
-class testMiddleware
+class testMiddleware implements MiddlewareInterface
 {
-    public function __invoke(Request $request, RequestHandler $handler): ResponseInterface
+    public function process(Request $request, RequestHandler $handler): ResponseInterface
     {
         $response = $handler->handle($request);     
         $existingContent = (string) $response->getBody();
+    
+        $response = new Response();   
 
         
-        if($existingContent === 'PASSW 2'){
-        
-        $response = new Response();
-        $response->getBody()->write('IGEN ' . $existingContent);
-        $response->getBody()->write(' ÖN JOGOSULT! ');
-        
-        return $response;
-        
+        if($existingContent === 'PASSW getT'){
+            $response->getBody()->write('IGEN ' . $existingContent);
+            $response->getBody()->write(' ÖN JOGOSULT! ');
+               
+        } else {
+            $response = $response->withStatus(403);
+            $response->getBody()->write('NEM JOGOSULT');
         }
         
-        return $handler->handle($request);
+        return $response->withHeader('X-TestCtrl', 'TestCtrl');
+        //return $handler->handle($request);
     }
 }
