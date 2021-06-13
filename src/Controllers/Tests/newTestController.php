@@ -3,6 +3,7 @@ namespace UserSystem\Controllers\Tests;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+//use Slim\Psr7\Response;
 use Slim\Views\PhpRenderer;
 
 class newTestController {
@@ -20,14 +21,19 @@ class newTestController {
 
     public function getT(Request $request, Response $response, $args) {
 	    $name = $args['name'];
+
+        $data = Array(
+            'Access' => $request->getAttribute('Access'),
+            'UserDatas' => $request->getAttribute('UserDatas')
+        );
         
         $templateVariables = [
-            'data' => $name . ' 2'
+            'data' => $data
         ];
-        
+
         $renderer = new PhpRenderer('../private/src/Views',  $templateVariables);
         
-        return $renderer->render($response, "textView.php", $args);
+        return $renderer->render($response, "jsonView.php", $args);
     }
 }
 
