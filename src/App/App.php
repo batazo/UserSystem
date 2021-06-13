@@ -14,6 +14,9 @@ require_once 'Middlewares.php';
 //Routes require
 require_once 'Routes.php';
 
+//testRoutes require
+require_once 'testRoutes.php';
+
 // The RoutingMiddleware should be added after our CORS middleware so routing is performed first
 $app->addRoutingMiddleware();
 
