@@ -3,7 +3,7 @@ User handler (Login and Register) systrem (PHP RESTful API based backend) and Fe
 
 ## This project is currently under development.
 - Expect heavy code breaking changes.
-- Version: 0.47-dev
+- Version: 0.48-dev
 
 ## Frontend demos
 - [Github.io DEMO](https://bzozoo.github.io/UserSystem/public/Frontends/dashboard.html)
