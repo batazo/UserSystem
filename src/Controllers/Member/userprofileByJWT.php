@@ -11,51 +11,37 @@ use UserSystem\Components\JWToken;
 class userprofileByJWT {
     public function get(Request $request, Response $response, $args) {
         header("Content-Type: application/json");
+        $requestedUserDatas = ($request->getAttribute('UserDatasFromJWT'))? $request->getAttribute('UserDatasFromJWT') : false;
+        
+        //dump($requestedUserDatas);
+        
         $responseHeaderSet = 401;
-        $JWTKey = false;
+        
         $data = Array(
+            'ErrorMessage' => 'We are in controller $data',
             'Connection' => 'Success',
+            'Access' => 'DENIED',
+            'ActuallTimeStamp' => time(),
             'UserName' => 'Failed',
             'User' => 'DoesnotExist'
         );
 
-        $headers = getallheaders();
+        if($requestedUserDatas){
+            $now = new \DateTimeImmutable();
+            $memberInstance = new Member();
+            $memberProfile = $memberInstance->getMemberByUNAME($requestedUserDatas->userName);
 
-        if(isset($headers['Authorization'])){
-            $JWTKey = filter_var(substr($headers['Authorization'], 7), FILTER_SANITIZE_STRING);
-        }
-
-        if(isset($_POST['jwtKEY'])){
-            $JWTKey = filter_var($_POST['jwtKEY'], FILTER_SANITIZE_STRING);
-        }
-
-        if($JWTKey){
-
-            $JWTokenInstance = new JWToken();
-    
-            $tokenUserDatas = $JWTokenInstance->decodeToken($JWTKey);
-            if($tokenUserDatas){
-                if($tokenUserDatas->iss === 'UserSystem'){
-            
-                    $now = new \DateTimeImmutable();
-                    $memberInstance = new Member();
-            
-                    $memberProfile = $memberInstance->getMemberByUNAME($tokenUserDatas->userName);
-
-                    if($memberProfile){
-                        if(
-                            $memberProfile[0]['UserName'] === $tokenUserDatas->userName && 
-                            $memberProfile[0]['ID'] === $tokenUserDatas->userId && 
-                            $memberProfile[0]['UserSecret'] === $tokenUserDatas->userSecret
-                            ){
-                            
-                                $responseHeaderSet = 200;
-                            
-                                $data = Array(
+            if($memberProfile){
+                if($memberProfile[0]['UserName'] === $requestedUserDatas->userName && 
+                    $memberProfile[0]['ID'] === $requestedUserDatas->userId && 
+                    $memberProfile[0]['UserSecret'] === $requestedUserDatas->userSecret){
+                        $responseHeaderSet = 200;                            
+                        $data = Array(
                                     "Connection" => "Success",
-                                    'CreatedTimeStamp' => $tokenUserDatas->iat,
+                                    'Access' => $request->getAttribute('Access'),
+                                    'CreatedTimeStamp' => $requestedUserDatas->iat,
                                     'ActuallTimeStamp' => $now->getTimestamp(),
-                                    'ExpiredTimeStamp' => $tokenUserDatas->exp,
+                                    'ExpiredTimeStamp' => $requestedUserDatas->exp,
                                     'UserRegistredAt' => $memberProfile[0]["UserRegTime"],
                                     'UserName' => $memberProfile[0]['UserName'],
                                     'UserAvatar' => $memberProfile[0]['UserAvatar'],
@@ -63,8 +49,6 @@ class userprofileByJWT {
                                     'UserSpeed' => $memberProfile[0]['UserSpeed'],
                                     'User' => 'Exist'
                                 );
-                        }
-                    }
                 }
             }
         }

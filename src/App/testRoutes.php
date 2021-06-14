@@ -14,7 +14,11 @@ use UserSystem\Middleware;
 
 //Test ROUTES
 //newRoutesTest with an own middleware
-$app->get('/tests/testroute/{name}', Tests\newTestController::class . ':getT')->add(new Middleware\testMiddleware());
+$app->map(['GET', 'POST'], '/tests/testroute/', Tests\newTestController::class . ':getT')->add(new Middleware\testMiddleware());
+// Allow preflight requests for testroute
+$app->options('/tests/testroute/', function ($request, $response, $args) {
+    return $response;
+});
 
 //Posttest
 $app->post('/tests/posttest', function (Request $request, Response $response) : Response {

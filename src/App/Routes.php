@@ -41,7 +41,7 @@ $app->group('/api/membercheck', function (RouteCollectorProxy $group) {
 });
 
 //User profile JSON DATAs ( by JWT )
-$app->map(['GET', 'POST'], '/api/user', Member\userprofileByJWT::class . ':get');
+$app->map(['GET', 'POST'], '/api/user', Member\userprofileByJWT::class . ':get')->add(new Middleware\authMiddleware());
 
 // Allow preflight requests for JWT user
 $app->options('/api/user', function ($request, $response, $args) {
